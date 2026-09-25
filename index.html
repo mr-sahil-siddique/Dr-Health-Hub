@@ -161,7 +161,7 @@ footer p{margin:4px 0}
 </head>
 <body>
 
-<div class="topbar"><span>🚚 Free Delivery on Orders Above Rs. 1000</span><span>📞 24/7 Support: 0300-0000000</span></div>
+<div class="topbar"><span>🚚 Free Delivery on Orders Above Rs. 2000</span><span>📞 24/7 Support: 0329-0592005</span></div>
 
 <header class="main">
   <div class="brand">
@@ -199,7 +199,7 @@ footer p{margin:4px 0}
 
 <footer>
   <p><strong>Dr Health Hub</strong> — Faisalabad's 24/7 Online Pharmacy</p>
-  <p>📍 Faisalabad, Punjab | 📞 0300-0000000 | ✉️ support@drhealthhub.pk</p>
+  <p>📍 Faisalabad, Punjab | 📞 0329-0592005 | ✉️ support@drhealthhub.pk</p>
   <p>© 2026 Dr Health Hub. All rights reserved.</p>
 </footer>
 
@@ -364,11 +364,6 @@ async function refreshAuth(){
       profile=data;
     }catch(e){}
 
-    /* ===== ADMIN CHECK (SECURE) =====
-       - Client `admin_access` table directly read NAHI karta
-       - Sirf is_admin_email() function call karta hai jo "haan/nahi" batata hai
-       - Table RLS se protected hai, koi leak nahi hota
-    */
     let emailIsAdmin=false;
     if(session.user.email){
       const {data, error}=await supa.rpc('is_admin_email', {
@@ -432,7 +427,6 @@ async function openAdmin(){
   const pin=prompt('Enter Admin PIN:');
   if(!pin)return;
 
-  /* PIN DB se verify — source mein PIN nahi hai */
   const {data:pinOk, error:pinErr}=await supa.rpc('verify_admin',{
     p_email: session.user.email,
     p_pin: pin
