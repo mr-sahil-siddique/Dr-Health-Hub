@@ -852,11 +852,35 @@ function addToCart(id,silent){
   }
 }
 function buyNow(id){
+  window._buyNowActive = true;  // ← YEH LINE ADD KARO
+  
+  if(!session){
+    pendingBuyId = true;
+    toast('Please login to place an order');
+    openAuth();
+    return;
+  }
   cart = {};
   cart[id] = 1;
   saveCart();
   updateBadge();
-  openCheckout();
+  document.getElementById('checkoutTotal').textContent = fmt(cartTotal());
+  document.getElementById('overlay').classList.add('show');
+  document.getElementById('drawer').classList.remove('show');
+  document.getElementById('checkoutModal').classList.add('show');
+}
+  
+  // Clear cart and add only this product
+  cart = {};
+  cart[id] = 1;
+  saveCart();
+  updateBadge();
+  
+  // Open checkout
+  document.getElementById('checkoutTotal').textContent = fmt(cartTotal());
+  document.getElementById('overlay').classList.add('show');
+  document.getElementById('drawer').classList.remove('show');
+  document.getElementById('checkoutModal').classList.add('show');
 }
 function changeQty(id,delta){
   const newQty = (cart[id]||0)+delta;
@@ -895,6 +919,14 @@ function openCheckout(){
   document.getElementById('checkoutModal').classList.add('show');
 }
 function closeAll(){
+  // Reset buy now flag
+  if (window._buyNowActive) {
+    cart = {};
+    saveCart();
+    updateBadge();
+    window._buyNowActive = false;
+  }
+  
   ['overlay','drawer','sideMenu','adminDrawer','checkoutModal','confirmModal','authModal','myOrdersModal','reviewModal','viewReviewsModal','adminPinModal','legalModal'].forEach(id=>{
     const el=document.getElementById(id);if(el)el.classList.remove('show');
   });
@@ -969,6 +1001,7 @@ document.getElementById('checkoutForm').addEventListener('submit',async e=>{
   const total=cartTotal();
   const {error}=await supa.from('orders').insert({order_code:orderId,user_id:session.user.id,customer_name:document.getElementById('cName').value,phone:document.getElementById('cPhone').value,address:document.getElementById('cAddr').value,items:items,total:total,payment_method:paymentMethod});
   if(error){toast('Order failed: '+error.message);return;}
+  window._buyNowActive = false;
   lastOrderData={orderId,name:document.getElementById('cName').value,phone:document.getElementById('cPhone').value,address:document.getElementById('cAddr').value,items,total,payment:paymentMethod};
   document.getElementById('confirmText').innerHTML=`Order <strong>${orderId}</strong> for <strong>${fmt(total)}</strong><br>Expected delivery: within 24 hours.`;
   document.getElementById('payReminderBox').style.display=paymentMethod!=='COD'?'block':'none';
