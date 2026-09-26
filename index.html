@@ -5,15 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Dr Health Hub — Faisalabad's 24/7 Online Pharmacy</title>
 
-<!-- ⚡ SPEED: Preconnect to Supabase & Fonts -->
+<meta name="description" content="Dr Health Hub — Faisalabad's 24/7 online pharmacy. Order medicines online with home delivery. Genuine products, fast delivery, cash on delivery.">
+<meta name="keywords" content="online pharmacy Faisalabad, buy medicines online Pakistan, Dr Health Hub, home delivery medicines">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Dr Health Hub — Faisalabad's 24/7 Online Pharmacy">
+<meta property="og:description" content="Order medicines online with home delivery in Faisalabad.">
+<meta property="og:type" content="website">
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg viewBox='0 0 48 48' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='48' height='48' rx='14' fill='%230e7c86'/%3E%3Cpath d='M24 9c-3.6 3.8-8 6.6-8 12.4C16 27.2 19.6 31 24 31s8-3.8 8-9.6C32 15.6 27.6 12.8 24 9z' fill='%23ffffff'/%3E%3Ccircle cx='24' cy='22' r='3.4' fill='%230e7c86'/%3E%3C/svg%3E">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://fnyyhvqsmzcworwuhssq.supabase.co" crossorigin>
-<link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-
-<!-- Favicon -->
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg viewBox='0 0 48 48' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='48' height='48' rx='14' fill='%230e7c86'/%3E%3Cpath d='M24 9c-3.6 3.8-8 6.6-8 12.4C16 27.2 19.6 31 24 31s8-3.8 8-9.6C32 15.6 27.6 12.8 24 9z' fill='%23ffffff'/%3E%3Ccircle cx='24' cy='22' r='3.4' fill='%230e7c86'/%3E%3C/svg%3E">
-
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 
@@ -32,7 +35,7 @@
   :root:not([data-theme="light"]){--bg:#0f1716;--card:#17201f;--text:#eef4f3;--muted:#9db0af;--border:#263231}
 }
 :root[data-theme="dark"]{--bg:#0f1716;--card:#17201f;--text:#eef4f3;--muted:#9db0af;--border:#263231}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
 *{box-sizing:border-box}
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
 body{margin:0;font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
@@ -40,6 +43,8 @@ h1,h2,h3{font-family:'Poppins',system-ui,sans-serif;margin:0}
 a{text-decoration:none;color:inherit}
 button{font-family:inherit;cursor:pointer}
 button:disabled{opacity:.6;cursor:not-allowed}
+
+/* ===== TOP BAR + HEADER ===== */
 .topbar{background:var(--teal-dark);color:#eafffb;font-size:.82rem;display:flex;justify-content:space-between;padding:8px 24px;padding-top:calc(8px + env(safe-area-inset-top,0px));flex-wrap:wrap;gap:6px}
 header.main{position:sticky;top:0;z-index:40;background:linear-gradient(100deg,var(--teal) 0%,var(--blue) 100%);color:#fff;padding:16px 24px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:12px;flex-shrink:0}
@@ -47,42 +52,64 @@ header.main{position:sticky;top:0;z-index:40;background:linear-gradient(100deg,v
 .brand h1{font-size:1.35rem;line-height:1.15}
 .brand p{margin:0;font-size:.78rem;opacity:.9}
 .search-wrap{flex:1;min-width:200px;position:relative}
-.search-wrap input{width:100%;padding:12px 16px 12px 42px;border-radius:999px;border:none;font-size:.95rem;background:#ffffff;color:#1c2b2c;font-weight:500}
+.search-wrap input{width:100%;padding:12px 16px 12px 42px;border-radius:999px;border:none;font-size:.95rem;background:#ffffff;color:#1c2b2c;font-weight:500;transition:box-shadow .2s}
 .search-wrap input::placeholder{color:#7a8a89;opacity:1}
-.search-wrap input:focus-visible{outline:3px solid var(--accent)}
+.search-wrap input:focus{outline:none;box-shadow:0 0 0 3px var(--accent)}
 .search-wrap span{position:absolute;left:16px;top:50%;transform:translateY(-50%);pointer-events:none}
-.cart-btn{position:relative;background:rgba(255,255,255,.16);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:999px;padding:11px 18px;font-weight:600;display:flex;gap:8px;align-items:center}
+.cart-btn{position:relative;background:rgba(255,255,255,.16);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:999px;padding:11px 18px;font-weight:600;display:flex;gap:8px;align-items:center;transition:background .2s}
+.cart-btn:hover{background:rgba(255,255,255,.25)}
 .badge{position:absolute;top:-8px;right:-8px;background:var(--accent);color:#fff;font-size:.72rem;min-width:20px;height:20px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-weight:700}
+.badge.bounce{animation:badgeBounce .4s}
+@keyframes badgeBounce{0%,100%{transform:scale(1)}50%{transform:scale(1.4)}}
 .auth-btn{background:rgba(255,255,255,.16);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:999px;padding:10px 16px;font-weight:600;font-size:.85rem;white-space:nowrap}
 .hamburger{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.4);color:#fff;width:44px;height:44px;border-radius:12px;font-size:1.2rem;flex-shrink:0}
 .drawer.left{left:0;right:auto;transform:translateX(-100%)}
 .drawer.left.show{transform:translateX(0)}
-.menu-link{display:flex;align-items:center;gap:12px;padding:14px 20px;font-weight:600;color:var(--text);border-bottom:1px solid var(--border)}
+.menu-link{display:flex;align-items:center;gap:12px;padding:14px 20px;font-weight:600;color:var(--text);border-bottom:1px solid var(--border);transition:background .15s}
 .menu-link:hover{background:var(--bg)}
-.tabs{display:flex;gap:8px;margin-bottom:16px}
-.tab{flex:1;padding:9px;border-radius:9px;border:1px solid var(--border);background:var(--bg);color:var(--muted);font-weight:600;font-size:.85rem}
-.tab.active{background:var(--teal);color:#fff;border-color:var(--teal)}
-nav.cats{display:flex;gap:10px;padding:16px 24px;overflow-x:auto;background:var(--bg);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:30}
-.pill{padding:10px 20px;border-radius:999px;border:1px solid var(--border);background:var(--card);color:var(--text);font-weight:600;font-size:.88rem;white-space:nowrap}
+
+/* ===== HERO ===== */
+.hero{text-align:center;padding:64px 24px 80px;position:relative;overflow:hidden}
+.hero h2{font-size:2.4rem;color:var(--teal);font-weight:800;animation:fadeUp .8s ease}
+.hero p{color:var(--muted);font-size:1.05rem;margin-top:12px;animation:fadeUp .8s ease .1s backwards}
+.hero button{margin-top:24px;background:var(--accent);color:#fff;border:none;padding:14px 30px;border-radius:999px;font-weight:700;font-size:1rem;transition:transform .2s,background .2s;animation:fadeUp .8s ease .2s backwards}
+.hero button:hover{background:var(--accent-dark);transform:translateY(-2px)}
+.hero button:active{transform:scale(.97)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* ===== TRUST BADGES ===== */
+.trust-section{padding:0 24px;max-width:1200px;margin:-40px auto 24px;position:relative;z-index:2}
+.trust-badges{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;padding:20px;background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,.06)}
+.trust-item{display:flex;align-items:center;gap:12px;padding:8px;transition:transform .2s}
+.trust-item:hover{transform:translateY(-2px)}
+.trust-icon{font-size:1.8rem;flex-shrink:0}
+.trust-item strong{display:block;font-size:.9rem}
+.trust-item p{margin:2px 0 0;font-size:.75rem;color:var(--muted)}
+
+/* ===== CATEGORIES ===== */
+nav.cats{display:flex;gap:10px;padding:16px 24px;overflow-x:auto;background:var(--bg);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:30;scrollbar-width:none}
+nav.cats::-webkit-scrollbar{display:none}
+.pill{padding:10px 20px;border-radius:999px;border:1px solid var(--border);background:var(--card);color:var(--text);font-weight:600;font-size:.88rem;white-space:nowrap;transition:all .2s}
+.pill:hover{border-color:var(--teal);color:var(--teal)}
 .pill.active{background:var(--teal);color:#fff;border-color:var(--teal)}
-.hero{text-align:center;padding:64px 24px 48px}
-.hero h2{font-size:2.4rem;color:var(--teal);font-weight:800}
-.hero p{color:var(--muted);font-size:1.05rem;margin-top:12px}
-.hero button{margin-top:24px;background:var(--accent);color:#fff;border:none;padding:14px 30px;border-radius:999px;font-weight:700;font-size:1rem}
+
+/* ===== MAIN GRID ===== */
 main{padding:0 24px 60px;max-width:1200px;margin:0 auto}
 main h3.section{font-size:1.5rem;margin:20px 0 22px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:20px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:8px;transition:box-shadow .2s}
-.card:hover{box-shadow:0 8px 24px rgba(0,0,0,.08)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:8px;transition:transform .3s,box-shadow .3s;position:relative;overflow:hidden}
+.card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.12)}
 .card.highlight{box-shadow:0 0 0 3px var(--accent);animation:highlightPulse 2s ease}
 @keyframes highlightPulse{0%{box-shadow:0 0 0 6px rgba(255,138,61,.5)}100%{box-shadow:0 0 0 3px var(--accent)}}
-.card .avatar{width:64px;height:64px;border-radius:14px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:2rem;overflow:hidden}
-.card .avatar img{width:100%;height:100%;object-fit:cover}
-.card .tag{font-size:.72rem;color:var(--teal);font-weight:600}
+.card .avatar{width:100%;height:140px;border-radius:14px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:3rem;overflow:hidden;position:relative}
+.card .avatar img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
+.card:hover .avatar img{transform:scale(1.08)}
+.card .tag{font-size:.72rem;color:var(--teal);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
 .card h4{font-size:1.02rem}
 .card .desc{color:var(--muted);font-size:.82rem;min-height:34px}
 .stock{color:var(--success);font-size:.78rem;display:flex;align-items:center;gap:5px}
-.stock::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--success)}
+.stock::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--success);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
 .rating{display:flex;align-items:center;gap:6px;font-size:.82rem;color:var(--muted);flex-wrap:wrap;cursor:pointer;border-radius:6px;padding:2px 4px;margin:-2px -4px;transition:background .15s}
 .rating:hover{background:rgba(14,124,134,.08)}
 .rating .stars{color:var(--star);letter-spacing:1px}
@@ -90,12 +117,38 @@ main h3.section{font-size:1.5rem;margin:20px 0 22px}
 .rating .verified{color:var(--success);font-size:.68rem;font-weight:700;background:rgba(31,169,113,.12);padding:2px 6px;border-radius:6px}
 .price{font-size:1.2rem;font-weight:700;color:var(--text);margin-top:2px}
 .card-actions{display:flex;gap:8px;margin-top:6px}
-.btn{flex:1;padding:10px;border-radius:10px;border:none;font-weight:600;font-size:.85rem}
+.btn{flex:1;padding:10px;border-radius:10px;border:none;font-weight:600;font-size:.85rem;transition:all .2s;position:relative;overflow:hidden}
 .btn-outline{background:transparent;border:1.5px solid var(--teal);color:var(--teal)}
 .btn-outline:hover{background:var(--teal);color:#fff}
 .btn-solid{background:var(--accent);color:#fff}
 .btn-solid:hover{background:var(--accent-dark)}
-.empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:50px 0}
+.btn-solid::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);transition:left .5s}
+.btn-solid:hover::before{left:100%}
+.btn:active{transform:scale(.97)}
+
+/* ===== WHY US ===== */
+.why-us{padding:60px 24px;background:var(--card);border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-top:40px}
+.why-us .container{max-width:1200px;margin:0 auto;text-align:center}
+.why-us h2{font-size:1.8rem;color:var(--teal);margin-bottom:40px}
+.why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px}
+.why-card{padding:28px 20px;background:var(--bg);border-radius:16px;border:1px solid var(--border);transition:transform .3s,box-shadow .3s}
+.why-card:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,.08)}
+.why-card span{font-size:2.5rem;display:block;margin-bottom:12px}
+.why-card h4{font-size:1.05rem;margin-bottom:8px}
+.why-card p{margin:0;font-size:.85rem;color:var(--muted);line-height:1.5}
+
+/* ===== TESTIMONIALS ===== */
+.testi{padding:60px 24px;max-width:1200px;margin:0 auto;text-align:center}
+.testi h2{font-size:1.8rem;color:var(--teal);margin-bottom:40px}
+.testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.testi-card{padding:24px;background:var(--card);border:1px solid var(--border);border-radius:16px;text-align:left;transition:transform .3s}
+.testi-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.08)}
+.testi-card .stars{color:var(--star);font-size:1rem;margin-bottom:10px;letter-spacing:2px}
+.testi-card p{margin:0 0 14px;color:var(--muted);font-size:.9rem;line-height:1.6;font-style:italic}
+.testi-card strong{color:var(--teal);font-size:.85rem}
+.testi-card .avatar{width:40px;height:40px;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;margin-bottom:10px}
+
+/* ===== DRAWERS + MODALS ===== */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .25s;z-index:50}
 .overlay.show{opacity:1;pointer-events:auto}
 .drawer{position:fixed;top:0;right:0;bottom:0;width:min(400px,92vw);background:var(--card);z-index:60;transform:translateX(100%);transition:transform .3s;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -105,7 +158,8 @@ main h3.section{font-size:1.5rem;margin:20px 0 22px}
 .iconbtn{background:none;border:none;font-size:1.3rem;color:var(--muted)}
 .cart-items{flex:1;overflow-y:auto;padding:14px 20px}
 .cart-line{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--border)}
-.cart-line .avatar{width:48px;height:48px;font-size:1.4rem;border-radius:10px;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cart-line .avatar{width:48px;height:48px;font-size:1.4rem;border-radius:10px;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
+.cart-line .avatar img{width:100%;height:100%;object-fit:cover}
 .cart-line .info{flex:1}
 .cart-line .info h5{font-size:.92rem;margin:0 0 4px}
 .qty{display:flex;align-items:center;gap:10px;margin-top:6px}
@@ -118,12 +172,17 @@ main h3.section{font-size:1.5rem;margin:20px 0 22px}
 .field{margin:14px 0}
 .field label{display:block;font-size:.82rem;margin-bottom:6px;color:var(--muted)}
 .field input,.field textarea,.field select{width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:inherit}
-.field input:focus-visible,.field textarea:focus-visible,.field select:focus-visible{outline:3px solid var(--accent)}
+.field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(14,124,134,.1)}
 .confirm-icon{font-size:3rem;text-align:center;margin-bottom:6px}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--teal-dark);color:#fff;padding:12px 22px;border-radius:999px;font-size:.9rem;opacity:0;pointer-events:none;transition:all .3s;z-index:80}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* Payment */
+/* ===== TABS ===== */
+.tabs{display:flex;gap:8px;margin-bottom:16px}
+.tab{flex:1;padding:9px;border-radius:9px;border:1px solid var(--border);background:var(--bg);color:var(--muted);font-weight:600;font-size:.85rem}
+.tab.active{background:var(--teal);color:#fff;border-color:var(--teal)}
+
+/* ===== PAYMENT ===== */
 .pay-options{display:flex;flex-direction:column;gap:8px;margin-top:8px}
 .pay-opt{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1.5px solid var(--border);border-radius:12px;cursor:pointer;transition:all .15s;background:var(--bg)}
 .pay-opt:hover{border-color:var(--teal)}
@@ -136,7 +195,7 @@ main h3.section{font-size:1.5rem;margin:20px 0 22px}
 .pay-info strong{color:var(--teal)}
 .pay-info .num{font-family:'Poppins',monospace;font-size:1.05rem;font-weight:700;color:var(--text);display:block;margin:6px 0;letter-spacing:.5px}
 
-/* WhatsApp */
+/* ===== WHATSAPP ===== */
 .wa-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:14px;background:var(--whatsapp);color:#fff;border:none;border-radius:12px;font-weight:700;font-size:1rem;margin-top:12px;transition:background .15s}
 .wa-btn:hover{background:var(--whatsapp-dark)}
 .wa-btn svg{width:22px;height:22px;flex-shrink:0}
@@ -145,7 +204,7 @@ main h3.section{font-size:1.5rem;margin:20px 0 22px}
 .pay-reminder .bank{background:#fff;border-radius:8px;padding:10px;margin-top:8px;color:#1c2b2c}
 .pay-reminder .bank p{margin:3px 0;font-size:.83rem}
 
-/* Reviews Modal */
+/* ===== REVIEWS ===== */
 .reviews-list{max-height:55vh;overflow-y:auto;margin-top:12px}
 .review-item{padding:12px 0;border-bottom:1px solid var(--border)}
 .review-item:last-child{border-bottom:none}
@@ -161,7 +220,7 @@ main h3.section{font-size:1.5rem;margin:20px 0 22px}
 .rating-summary .info .stars{font-size:1.1rem;color:var(--star)}
 .rating-summary .info .count{font-size:.78rem;color:var(--muted);margin-top:3px}
 
-/* Notification */
+/* ===== NOTIFICATION ===== */
 .notif-pop{position:fixed;top:calc(115px + env(safe-area-inset-top,0px));right:20px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px 14px 14px;box-shadow:0 14px 40px rgba(0,0,0,.22);display:flex;gap:12px;align-items:flex-start;z-index:45;width:min(360px,calc(100vw - 40px));transform:translateX(calc(100% + 30px));opacity:0;transition:transform .4s cubic-bezier(.16,1,.3,1),opacity .3s ease;pointer-events:none;cursor:pointer}
 .notif-pop.show{transform:translateX(0);opacity:1;pointer-events:auto}
 .notif-pop .np-icon{width:46px;height:46px;border-radius:11px;background:linear-gradient(135deg,var(--teal) 0%,var(--blue) 100%);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;overflow:hidden;color:#fff;position:relative}
@@ -176,11 +235,35 @@ main h3.section{font-size:1.5rem;margin:20px 0 22px}
 .notif-pop .np-msg strong{color:var(--text);font-weight:600}
 .notif-pop .np-time{font-size:.72rem;color:var(--muted);margin-top:5px;display:block}
 .notif-pop .np-close{background:none;border:none;color:var(--muted);font-size:.9rem;padding:2px 4px;line-height:1;flex-shrink:0;align-self:flex-start;margin-top:-2px}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
-@media(max-width:480px){.notif-pop{top:calc(105px + env(safe-area-inset-top,0px));right:10px;left:10px;width:auto}}
 
+/* ===== WHATSAPP FLOAT ===== */
+.wa-float{position:fixed;bottom:24px;right:24px;display:flex;align-items:center;gap:12px;z-index:44}
+.wa-float .wa-tip{background:#fff;color:#1c2b2c;padding:12px 18px;border-radius:30px;font-size:.9rem;font-weight:600;box-shadow:0 8px 28px rgba(0,0,0,.18);white-space:nowrap;display:flex;align-items:center;gap:10px;border:1px solid rgba(0,0,0,.06);animation:fadeUp .5s ease}
+.wa-float .wa-tip .wa-close{background:none;border:none;color:#999;font-size:1rem;padding:0 4px;line-height:1;cursor:pointer}
+.wa-float .wa-tip .wa-close:hover{color:#333}
+.wa-float .wa-btn-circle{width:64px;height:64px;background:#25D366;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 28px rgba(37,211,102,.45);transition:transform .2s;flex-shrink:0;border:none;cursor:pointer;animation:waPulse 2.5s infinite}
+.wa-float .wa-btn-circle:hover{transform:scale(1.08)}
+.wa-float .wa-btn-circle svg{width:36px;height:36px}
+@keyframes waPulse{0%,100%{box-shadow:0 8px 28px rgba(37,211,102,.45)}50%{box-shadow:0 8px 28px rgba(37,211,102,.7),0 0 0 12px rgba(37,211,102,.12)}}
+
+/* ===== FADE-IN ON SCROLL ===== */
+.fade-in{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+
+/* ===== FOOTER ===== */
 footer{background:var(--teal-dark);color:#dff5f2;padding:34px 24px;text-align:center;font-size:.85rem}
 footer p{margin:4px 0}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:480px){
+  .notif-pop{top:calc(105px + env(safe-area-inset-top,0px));right:10px;left:10px;width:auto}
+  .wa-float{bottom:16px;right:16px;gap:8px}
+  .wa-float .wa-tip{padding:10px 14px;font-size:.82rem}
+  .wa-float .wa-btn-circle{width:56px;height:56px}
+  .wa-float .wa-btn-circle svg{width:30px;height:30px}
+  .hero h2{font-size:1.8rem}
+}
+@media(max-width:360px){.wa-float .wa-tip{display:none}}
 </style>
 </head>
 <body>
@@ -217,10 +300,58 @@ footer p{margin:4px 0}
   <button onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Shop Now</button>
 </section>
 
+<!-- Trust Badges -->
+<section class="trust-section">
+  <div class="trust-badges">
+    <div class="trust-item"><span class="trust-icon">✅</span><div><strong>100% Genuine</strong><p>Original medicines only</p></div></div>
+    <div class="trust-item"><span class="trust-icon">🚚</span><div><strong>Fast Delivery</strong><p>Within 24 hours</p></div></div>
+    <div class="trust-item"><span class="trust-icon">💵</span><div><strong>Cash on Delivery</strong><p>Pay when you receive</p></div></div>
+    <div class="trust-item"><span class="trust-icon">📞</span><div><strong>24/7 Support</strong><p>Always available</p></div></div>
+  </div>
+</section>
+
 <main>
-  <h3 class="section" id="products">Our Medicines</h3>
+  <h3 class="section fade-in" id="products">Our Medicines</h3>
   <div class="grid" id="grid"></div>
 </main>
+
+<!-- Why Us -->
+<section class="why-us fade-in">
+  <div class="container">
+    <h2>Why Choose Dr Health Hub?</h2>
+    <div class="why-grid">
+      <div class="why-card"><span>🏆</span><h4>Trusted Pharmacy</h4><p>Faisalabad ka bharosa mand online pharmacy</p></div>
+      <div class="why-card"><span>💊</span><h4>Genuine Products</h4><p>Direct from licensed distributors</p></div>
+      <div class="why-card"><span>⚡</span><h4>Fast Delivery</h4><p>Same day delivery in Faisalabad</p></div>
+      <div class="why-card"><span>💰</span><h4>Best Prices</h4><p>Guaranteed lowest rates</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="testi fade-in">
+  <h2>What Our Customers Say</h2>
+  <div class="testi-grid">
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <p>"Bohat acha service, fast delivery. Medicines original hain. Highly recommended!"</p>
+      <div class="avatar">A</div>
+      <strong>Ahmed Raza — Faisalabad</strong>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <p>"Ghar baithe medicines mil gayi. Payment bhi easy. Bohat satisfied hoon."</p>
+      <div class="avatar">F</div>
+      <strong>Fatima Khan — Lahore</strong>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <p>"24/7 support bohat helpful hai. WhatsApp par order confirm hua same day."</p>
+      <div class="avatar">B</div>
+      <strong>Bilal Hussain — Islamabad</strong>
+    </div>
+  </div>
+</section>
 
 <footer>
   <p><strong>Dr Health Hub</strong> — Faisalabad's 24/7 Online Pharmacy</p>
@@ -242,7 +373,7 @@ footer p{margin:4px 0}
   </div>
 </aside>
 
-<aside class="drawer" id="drawer" aria-label="Shopping cart">
+<aside class="drawer" id="drawer">
   <div class="drawer-head"><h3>Your Cart</h3><button class="iconbtn" onclick="closeAll()">✕</button></div>
   <div class="cart-items" id="cartItems"></div>
   <div class="cart-foot">
@@ -251,38 +382,25 @@ footer p{margin:4px 0}
   </div>
 </aside>
 
-<aside class="drawer" id="adminDrawer" aria-label="Admin orders">
+<aside class="drawer" id="adminDrawer">
   <div class="drawer-head"><h3>Admin — All Orders</h3><button class="iconbtn" onclick="closeAll()">✕</button></div>
   <div class="cart-items" id="adminOrders"></div>
 </aside>
 
-<div class="modal" id="checkoutModal" role="dialog" aria-label="Checkout">
+<div class="modal" id="checkoutModal">
   <h3>Checkout</h3>
   <form id="checkoutForm">
-    <div class="field"><label for="cName">Full Name</label><input id="cName" required></div>
-    <div class="field"><label for="cPhone">Phone Number</label><input id="cPhone" required placeholder="03XX-XXXXXXX"></div>
-    <div class="field"><label for="cAddr">Delivery Address</label><textarea id="cAddr" rows="2" required></textarea></div>
+    <div class="field"><label>Full Name</label><input id="cName" required></div>
+    <div class="field"><label>Phone Number</label><input id="cPhone" required placeholder="03XX-XXXXXXX"></div>
+    <div class="field"><label>Delivery Address</label><textarea id="cAddr" rows="2" required></textarea></div>
     <div class="field">
       <label>Payment Method</label>
       <div class="pay-options">
-        <label class="pay-opt selected" id="payCod">
-          <input type="radio" name="payment" value="COD" checked onchange="updatePayUI('COD')">
-          <span class="pay-label">💵 Cash on Delivery<span class="pay-sub">Delivery ke waqt cash</span></span>
-        </label>
-        <label class="pay-opt" id="payJazz">
-          <input type="radio" name="payment" value="JazzCash" onchange="updatePayUI('JazzCash')">
-          <span class="pay-label">📱 JazzCash<span class="pay-sub">Advance — screenshot WhatsApp</span></span>
-        </label>
-        <label class="pay-opt" id="payEasy">
-          <input type="radio" name="payment" value="EasyPaisa" onchange="updatePayUI('EasyPaisa')">
-          <span class="pay-label">📱 EasyPaisa<span class="pay-sub">Advance — screenshot WhatsApp</span></span>
-        </label>
+        <label class="pay-opt selected" id="payCod"><input type="radio" name="payment" value="COD" checked onchange="updatePayUI('COD')"><span class="pay-label">💵 Cash on Delivery<span class="pay-sub">Delivery ke waqt cash</span></span></label>
+        <label class="pay-opt" id="payJazz"><input type="radio" name="payment" value="JazzCash" onchange="updatePayUI('JazzCash')"><span class="pay-label">📱 JazzCash<span class="pay-sub">Advance — screenshot WhatsApp</span></span></label>
+        <label class="pay-opt" id="payEasy"><input type="radio" name="payment" value="EasyPaisa" onchange="updatePayUI('EasyPaisa')"><span class="pay-label">📱 EasyPaisa<span class="pay-sub">Advance — screenshot WhatsApp</span></span></label>
       </div>
-      <div class="pay-info" id="payInfo">
-        <strong>Payment Number:</strong>
-        <span class="num">0329-0592005</span>
-        Order place karne ke baad screenshot WhatsApp par bhejein.
-      </div>
+      <div class="pay-info" id="payInfo"><strong>Payment Number:</strong><span class="num">0329-0592005</span>Order place karne ke baad screenshot WhatsApp par bhejein.</div>
     </div>
     <div class="row"><span>Order Total</span><span id="checkoutTotal">Rs. 0</span></div>
     <button class="btn btn-solid" style="width:100%;padding:13px;margin-top:6px" type="submit">Place Order</button>
@@ -290,105 +408,63 @@ footer p{margin:4px 0}
   </form>
 </div>
 
-<div class="modal" id="confirmModal" role="dialog" aria-label="Order confirmed">
+<div class="modal" id="confirmModal">
   <div class="confirm-icon">✅</div>
   <h3 style="text-align:center">Order Placed!</h3>
   <p style="text-align:center;color:var(--muted)" id="confirmText"></p>
   <div id="payReminderBox" style="display:none">
-    <div class="pay-reminder">
-      <strong>⚠️ Payment Reminder</strong>
+    <div class="pay-reminder"><strong>⚠️ Payment Reminder</strong>
       <p style="margin-top:6px;color:var(--muted)">Order confirm karne ke liye payment bhejein:</p>
-      <div class="bank">
-        <p><strong>JazzCash / EasyPaisa:</strong></p>
-        <p style="font-size:1rem;font-weight:700;color:var(--teal)">0329-0592005</p>
-        <p style="color:var(--muted);font-size:.78rem">Dr Health Hub</p>
-      </div>
+      <div class="bank"><p><strong>JazzCash / EasyPaisa:</strong></p><p style="font-size:1rem;font-weight:700;color:var(--teal)">0329-0592005</p><p style="color:var(--muted);font-size:.78rem">Dr Health Hub</p></div>
       <p style="margin-top:8px;color:var(--muted)">Screenshot WhatsApp par 👇</p>
     </div>
   </div>
-  <button class="wa-btn" id="waBtn" onclick="sendWhatsApp()">
-    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-    Send Order on WhatsApp
-  </button>
+  <button class="wa-btn" onclick="sendWhatsApp()"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Send Order on WhatsApp</button>
   <button class="btn btn-solid" style="width:100%;padding:13px;margin-top:10px" onclick="closeAll()">Continue Shopping</button>
 </div>
 
-<div class="modal" id="authModal" role="dialog" aria-label="Login or Signup">
-  <div class="tabs">
-    <button class="tab active" id="tabLogin" onclick="switchTab('login')">Login</button>
-    <button class="tab" id="tabSignup" onclick="switchTab('signup')">Sign Up</button>
-  </div>
-  <form id="loginForm">
-    <div class="field"><label>Email</label><input type="email" id="loginEmail" required></div>
-    <div class="field"><label>Password</label><input type="password" id="loginPass" required></div>
-    <button class="btn btn-solid" style="width:100%;padding:12px" type="submit" id="loginBtn">Login</button>
-  </form>
-  <form id="signupForm" style="display:none">
-    <div class="field"><label>Full Name</label><input type="text" id="suName" required></div>
-    <div class="field"><label>Email</label><input type="email" id="suEmail" required></div>
-    <div class="field"><label>Password</label><input type="password" id="suPass" required minlength="6"></div>
-    <button class="btn btn-solid" style="width:100%;padding:12px" type="submit" id="signupBtn">Create Account</button>
-  </form>
+<div class="modal" id="authModal">
+  <div class="tabs"><button class="tab active" id="tabLogin" onclick="switchTab('login')">Login</button><button class="tab" id="tabSignup" onclick="switchTab('signup')">Sign Up</button></div>
+  <form id="loginForm"><div class="field"><label>Email</label><input type="email" id="loginEmail" required></div><div class="field"><label>Password</label><input type="password" id="loginPass" required></div><button class="btn btn-solid" style="width:100%;padding:12px" type="submit" id="loginBtn">Login</button></form>
+  <form id="signupForm" style="display:none"><div class="field"><label>Full Name</label><input type="text" id="suName" required></div><div class="field"><label>Email</label><input type="email" id="suEmail" required></div><div class="field"><label>Password</label><input type="password" id="suPass" required minlength="6"></div><button class="btn btn-solid" style="width:100%;padding:12px" type="submit" id="signupBtn">Create Account</button></form>
   <button class="btn btn-outline" style="width:100%;padding:11px;margin-top:10px" onclick="closeAll()">Cancel</button>
 </div>
 
-<div class="modal" id="myOrdersModal" role="dialog">
-  <h3>My Orders</h3>
-  <div id="myOrdersList" style="max-height:50vh;overflow-y:auto;margin-top:10px"></div>
-  <button class="btn btn-outline" style="width:100%;padding:11px;margin-top:14px" onclick="closeAll()">Close</button>
-</div>
+<div class="modal" id="myOrdersModal"><h3>My Orders</h3><div id="myOrdersList" style="max-height:50vh;overflow-y:auto;margin-top:10px"></div><button class="btn btn-outline" style="width:100%;padding:11px;margin-top:14px" onclick="closeAll()">Close</button></div>
 
-<div class="modal" id="reviewModal" role="dialog">
+<div class="modal" id="reviewModal">
   <h3>Write a Review</h3>
   <p id="reviewProductName" style="color:var(--muted);font-size:.85rem;margin-top:6px"></p>
   <form id="reviewForm">
-    <div class="field">
-      <label>Rating</label>
-      <select id="rvRating" required>
-        <option value="5">⭐⭐⭐⭐⭐ 5 — Excellent</option>
-        <option value="4">⭐⭐⭐⭐ 4 — Good</option>
-        <option value="3">⭐⭐⭐ 3 — Okay</option>
-        <option value="2">⭐⭐ 2 — Poor</option>
-        <option value="1">⭐ 1 — Bad</option>
-      </select>
-    </div>
+    <div class="field"><label>Rating</label><select id="rvRating" required><option value="5">⭐⭐⭐⭐⭐ 5 — Excellent</option><option value="4">⭐⭐⭐⭐ 4 — Good</option><option value="3">⭐⭐⭐ 3 — Okay</option><option value="2">⭐⭐ 2 — Poor</option><option value="1">⭐ 1 — Bad</option></select></div>
     <div class="field"><label>Comment</label><textarea id="rvComment" rows="3" required></textarea></div>
     <button class="btn btn-solid" style="width:100%;padding:12px" type="submit">Submit Review</button>
     <button class="btn btn-outline" style="width:100%;padding:11px;margin-top:10px" type="button" onclick="closeAll()">Cancel</button>
   </form>
 </div>
 
-<div class="modal" id="viewReviewsModal" role="dialog" style="width:min(480px,94vw)">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-    <h3 id="reviewsTitle">Reviews</h3>
-    <button class="iconbtn" onclick="closeAll()">✕</button>
-  </div>
-  <div class="rating-summary">
-    <div class="big-num" id="rvAvgBig">0.0</div>
-    <div class="info">
-      <div class="stars" id="rvStarsBig">☆☆☆☆☆</div>
-      <div class="count" id="rvCountBig">0 reviews</div>
-    </div>
-  </div>
+<div class="modal" id="viewReviewsModal" style="width:min(480px,94vw)">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><h3 id="reviewsTitle">Reviews</h3><button class="iconbtn" onclick="closeAll()">✕</button></div>
+  <div class="rating-summary"><div class="big-num" id="rvAvgBig">0.0</div><div class="info"><div class="stars" id="rvStarsBig">☆☆☆☆☆</div><div class="count" id="rvCountBig">0 reviews</div></div></div>
   <div class="reviews-list" id="reviewsList"></div>
   <button class="btn btn-solid" style="width:100%;padding:12px;margin-top:14px" onclick="closeAll()">Close</button>
 </div>
 
 <div class="notif-pop" id="notifPop" onclick="clickNotif()">
   <div class="np-icon" id="npIcon">💊</div>
-  <div class="np-body">
-    <div class="np-head"><span class="np-dot"></span>Recent Order</div>
-    <div class="np-title" id="npTitle"></div>
-    <div class="np-msg" id="npMsg"></div>
-    <span class="np-time" id="npTime"></span>
-  </div>
+  <div class="np-body"><div class="np-head"><span class="np-dot"></span>Recent Order</div><div class="np-title" id="npTitle"></div><div class="np-msg" id="npMsg"></div><span class="np-time" id="npTime"></span></div>
   <button class="np-close" onclick="event.stopPropagation();hideNotif()">✕</button>
+</div>
+
+<!-- WhatsApp Float -->
+<div class="wa-float" id="waFloat">
+  <div class="wa-tip" id="waTip"><span>Need Help? Chat on WhatsApp</span><button class="wa-close" onclick="document.getElementById('waTip').style.display='none'">✕</button></div>
+  <button class="wa-btn-circle" onclick="openWhatsAppSupport()" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></button>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-/* ========== CONFIG ========== */
 const SUPABASE_URL="https://fnyyhvqsmzcworwuhssq.supabase.co";
 const SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZueXlodnFzbXpjd29yd3Voc3NxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAzMjk4ODAsImV4cCI6MjEwNTkwNTg4MH0.QAJ-wDBIa9BFPD5BBEOVyTlW6EHOPk9P_cmX5FqsPvE";
 const WHATSAPP_NUMBER = "923290592005";
@@ -410,9 +486,7 @@ const FAKE_ORDERS=[
   {name:"Usman Tariq", city:"Multan", time:"4 minutes ago"},
   {name:"Sana Iqbal", city:"Karachi", time:"5 minutes ago"},
   {name:"Hassan Ali", city:"Faisalabad", time:"6 minutes ago"},
-  {name:"Maryam Noor", city:"Peshawar", time:"7 minutes ago"},
-  {name:"Zainab Sheikh", city:"Faisalabad", time:"8 minutes ago"},
-  {name:"Ali Hassan", city:"Rawalpindi", time:"10 minutes ago"}
+  {name:"Maryam Noor", city:"Peshawar", time:"7 minutes ago"}
 ];
 let fakeOrderIndex=0;
 let notifTimer=null;
@@ -459,10 +533,7 @@ document.getElementById('loginForm').addEventListener('submit',async e=>{
   e.preventDefault();
   const btn=document.getElementById('loginBtn');
   btn.disabled=true;btn.textContent='Signing in...';
-  const {data,error}=await supa.auth.signInWithPassword({
-    email:document.getElementById('loginEmail').value,
-    password:document.getElementById('loginPass').value
-  });
+  const {data,error}=await supa.auth.signInWithPassword({email:document.getElementById('loginEmail').value,password:document.getElementById('loginPass').value});
   btn.disabled=false;btn.textContent='Login';
   if(error){toast(error.message);return;}
   session=data.session;toast('Welcome back!');closeAll();
@@ -473,11 +544,7 @@ document.getElementById('signupForm').addEventListener('submit',async e=>{
   e.preventDefault();
   const btn=document.getElementById('signupBtn');
   btn.disabled=true;btn.textContent='Creating...';
-  const {error}=await supa.auth.signUp({
-    email:document.getElementById('suEmail').value,
-    password:document.getElementById('suPass').value,
-    options:{data:{full_name:document.getElementById('suName').value}}
-  });
+  const {error}=await supa.auth.signUp({email:document.getElementById('suEmail').value,password:document.getElementById('suPass').value,options:{data:{full_name:document.getElementById('suName').value}}});
   btn.disabled=false;btn.textContent='Create Account';
   if(error){toast(error.message);return;}
   toast('Account created!');setTimeout(()=>location.reload(),1200);
@@ -497,14 +564,12 @@ async function openAdmin(){
 function saveCart(){try{localStorage.setItem('dhh_cart',JSON.stringify(cart))}catch(e){}}
 function fmt(n){return "Rs. "+Number(n).toLocaleString()}
 function stars(rating){const full=Math.floor(rating);const half=(rating-full)>=0.5;return '★'.repeat(full)+(half?'⯨':'')+'☆'.repeat(5-full-(half?1:0));}
-
 function updatePayUI(method){
   document.getElementById('payCod').classList.toggle('selected',method==='COD');
   document.getElementById('payJazz').classList.toggle('selected',method==='JazzCash');
   document.getElementById('payEasy').classList.toggle('selected',method==='EasyPaisa');
   document.getElementById('payInfo').classList.toggle('show',method!=='COD');
 }
-
 function renderCats(){
   document.getElementById('cats').innerHTML=CATS.map(c=>`<button class="pill ${c===activeCat?'active':''}" onclick="setCat('${c}')">${c}</button>`).join('');
 }
@@ -515,7 +580,7 @@ function renderGrid(){
   const items=PRODUCTS.filter(p=>(activeCat==="All"||p.cat===activeCat)&&p.name.toLowerCase().includes(term.toLowerCase()));
   if(!items.length){grid.innerHTML='<div class="empty">No medicines match your search.</div>';return;}
   grid.innerHTML=items.map(p=>`
-    <div class="card" data-pid="${p.id}">
+    <div class="card fade-in" data-pid="${p.id}">
       <div class="avatar">${p.img ? `<img src="${p.img}" alt="${p.name}" loading="lazy">` : p.icon}</div>
       <span class="tag">${p.cat}</span>
       <h4>${p.name}</h4>
@@ -534,6 +599,15 @@ function renderGrid(){
       </div>
       <button class="btn btn-outline" style="width:100%;margin-top:6px;font-size:.78rem;padding:8px" onclick="openReview(${p.id})">⭐ Write Review</button>
     </div>`).join('');
+  observeFadeIns();
+}
+
+/* ===== FADE-IN OBSERVER ===== */
+function observeFadeIns(){
+  const obs=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});
+  },{threshold:.1});
+  document.querySelectorAll('.fade-in:not(.visible)').forEach(el=>obs.observe(el));
 }
 
 async function openReviews(productId){
@@ -547,24 +621,20 @@ async function openReviews(productId){
   document.getElementById('overlay').classList.add('show');
   document.getElementById('viewReviewsModal').classList.add('show');
   const {data,error}=await supa.from('reviews').select('user_name,rating,comment,created_at').eq('product_id',productId).order('created_at',{ascending:false}).limit(50);
-  if(error){document.getElementById('reviewsList').innerHTML='<div class="review-empty">Could not load reviews.</div>';return;}
-  if(!data||!data.length){document.getElementById('reviewsList').innerHTML='<div class="review-empty">No reviews yet. Be the first!</div>';return;}
+  if(error){document.getElementById('reviewsList').innerHTML='<div class="review-empty">Could not load.</div>';return;}
+  if(!data||!data.length){document.getElementById('reviewsList').innerHTML='<div class="review-empty">No reviews yet!</div>';return;}
   document.getElementById('reviewsList').innerHTML=data.map(r=>{
     const date=new Date(r.created_at);
     const days=Math.floor((Date.now()-date.getTime())/(1000*60*60*24));
     const when=days<1?'today':days===1?'1 day ago':days<30?days+' days ago':Math.floor(days/30)+' months ago';
     const safeName=(r.user_name||'Anonymous').replace(/[<>]/g,'');
     const safeComment=(r.comment||'').replace(/[<>]/g,'');
-    return `<div class="review-item">
-      <div class="review-head"><span class="review-name">${safeName}</span><span class="review-date">${when}</span></div>
-      <div class="review-stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div>
-      <div class="review-comment">${safeComment}</div>
-    </div>`;
+    return `<div class="review-item"><div class="review-head"><span class="review-name">${safeName}</span><span class="review-date">${when}</span></div><div class="review-stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div><div class="review-comment">${safeComment}</div></div>`;
   }).join('');
 }
 
 function openReview(id){
-  if(!session){toast('Please login to write a review');openAuth();return;}
+  if(!session){toast('Please login');openAuth();return;}
   const p=PRODUCTS.find(x=>x.id===id);
   reviewingProductId=id;
   document.getElementById('reviewProductName').textContent='Product: '+p.name;
@@ -577,18 +647,21 @@ document.getElementById('reviewForm').addEventListener('submit',async e=>{
   const comment=document.getElementById('rvComment').value;
   const userName=(session.user.user_metadata?.full_name)||session.user.email.split('@')[0];
   const {error}=await supa.from('reviews').insert({product_id:reviewingProductId,user_id:session.user.id,user_name:userName,rating:rating,comment:comment});
-  if(error){toast('Review failed: '+error.message);return;}
+  if(error){toast('Failed: '+error.message);return;}
   const {data:allReviews}=await supa.from('reviews').select('rating').eq('product_id',reviewingProductId);
   if(allReviews&&allReviews.length){
     const avg=allReviews.reduce((s,r)=>s+r.rating,0)/allReviews.length;
     await supa.from('products').update({rating:parseFloat(avg.toFixed(1)),reviews_count:allReviews.length}).eq('id',reviewingProductId);
   }
-  toast('Review submitted! Thank you ⭐');
+  toast('Review submitted! ⭐');
   closeAll();e.target.reset();
   await loadProducts();
 });
 
-function addToCart(id,silent){cart[id]=(cart[id]||0)+1;saveCart();updateBadge();if(!silent)toast('Added to cart');}
+function addToCart(id,silent){
+  cart[id]=(cart[id]||0)+1;saveCart();updateBadge();
+  if(!silent){toast('Added to cart');document.getElementById('cartCount').classList.add('bounce');setTimeout(()=>document.getElementById('cartCount').classList.remove('bounce'),400);}
+}
 function buyNow(id){addToCart(id,true);openCheckout();}
 function changeQty(id,delta){cart[id]=(cart[id]||0)+delta;if(cart[id]<=0)delete cart[id];saveCart();updateBadge();renderCart();}
 function removeItem(id){delete cart[id];saveCart();updateBadge();renderCart();}
@@ -602,18 +675,7 @@ function renderCart(){
     box.innerHTML=ids.map(id=>{
       const p=PRODUCTS.find(x=>x.id==id);
       if(!p)return '';
-      return `<div class="cart-line">
-        <div class="avatar">${p.img ? `<img src="${p.img}" alt="${p.name}" loading="lazy">` : p.icon}</div>
-        <div class="info"><h5>${p.name}</h5>
-          <span style="color:var(--muted);font-size:.82rem">${fmt(p.price)}</span>
-          <div class="qty">
-            <button onclick="changeQty(${p.id},-1)">−</button>
-            <span>${cart[id]}</span>
-            <button onclick="changeQty(${p.id},1)">+</button>
-            <button class="iconbtn" style="font-size:.9rem;margin-left:auto" onclick="removeItem(${p.id})">🗑️</button>
-          </div>
-        </div>
-      </div>`;
+      return `<div class="cart-line"><div class="avatar">${p.img ? `<img src="${p.img}" alt="${p.name}" loading="lazy">` : p.icon}</div><div class="info"><h5>${p.name}</h5><span style="color:var(--muted);font-size:.82rem">${fmt(p.price)}</span><div class="qty"><button onclick="changeQty(${p.id},-1)">−</button><span>${cart[id]}</span><button onclick="changeQty(${p.id},1)">+</button><button class="iconbtn" style="font-size:.9rem;margin-left:auto" onclick="removeItem(${p.id})">🗑️</button></div></div></div>`;
     }).join('');
   }
   document.getElementById('subtotal').textContent=fmt(cartTotal());
@@ -622,7 +684,7 @@ function renderCart(){
 function openCart(){renderCart();document.getElementById('overlay').classList.add('show');document.getElementById('drawer').classList.add('show');}
 function openCheckout(){
   if(!Object.keys(cart).length){toast('Your cart is empty');return;}
-  if(!session){pendingBuyId=true;toast('Please login to place an order');openAuth();return;}
+  if(!session){pendingBuyId=true;toast('Please login');openAuth();return;}
   document.getElementById('checkoutTotal').textContent=fmt(cartTotal());
   document.getElementById('overlay').classList.add('show');
   document.getElementById('drawer').classList.remove('show');
@@ -630,8 +692,7 @@ function openCheckout(){
 }
 function closeAll(){
   ['overlay','drawer','sideMenu','adminDrawer','checkoutModal','confirmModal','authModal','myOrdersModal','reviewModal','viewReviewsModal'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(el)el.classList.remove('show');
+    const el=document.getElementById(id);if(el)el.classList.remove('show');
   });
 }
 document.getElementById('menuBtn').addEventListener('click',()=>{
@@ -649,33 +710,23 @@ async function openMyOrders(){
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(window._tt);window._tt=setTimeout(()=>t.classList.remove('show'),1800);}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeAll();});
 
-/* WhatsApp */
+/* WhatsApp order */
 function sendWhatsApp(){
-  if(!lastOrderData){toast('Order info missing');return;}
+  if(!lastOrderData){toast('Order missing');return;}
   const {orderId,name,phone,address,items,total,payment}=lastOrderData;
   const itemsText=items.map(i=>`• ${i.name} x${i.qty} = Rs. ${i.price*i.qty}`).join('\n');
-  const msg=`🏥 *Dr Health Hub — New Order*
-
-📦 *Order ID:* ${orderId}
-👤 *Name:* ${name}
-📞 *Phone:* ${phone}
-📍 *Address:* ${address}
-
-🛒 *Items:*
-${itemsText}
-
-💰 *Total:* Rs. ${total}
-💳 *Payment:* ${payment}
-
-${payment!=='COD'?'✅ Payment screenshot bhej raha hoon.':'💵 Cash on Delivery'}`;
+  const msg=`🏥 *Dr Health Hub — New Order*\n\n📦 *Order ID:* ${orderId}\n👤 *Name:* ${name}\n📞 *Phone:* ${phone}\n📍 *Address:* ${address}\n\n🛒 *Items:*\n${itemsText}\n\n💰 *Total:* Rs. ${total}\n💳 *Payment:* ${payment}\n\n${payment!=='COD'?'✅ Payment screenshot bhej raha hoon.':'💵 Cash on Delivery'}`;
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`,'_blank');
+}
+function openWhatsAppSupport(){
+  const msg=`Assalam o Alaikum Dr Health Hub! 🌟\n\nMujhe aapki website par kuch information chahiye. Please guide karein.`;
   window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`,'_blank');
 }
 
 /* Notification */
 function showNotif(){
   if(!PRODUCTS.length)return;
-  const cust=FAKE_ORDERS[fakeOrderIndex%FAKE_ORDERS.length];
-  fakeOrderIndex++;
+  const cust=FAKE_ORDERS[fakeOrderIndex%FAKE_ORDERS.length];fakeOrderIndex++;
   const prod=PRODUCTS[Math.floor(Math.random()*PRODUCTS.length)];
   currentNotifProdId=prod.id;
   const pop=document.getElementById('notifPop');
@@ -690,8 +741,7 @@ function showNotif(){
 function hideNotif(){document.getElementById('notifPop').classList.remove('show');}
 function clickNotif(){
   if(!currentNotifProdId){hideNotif();return;}
-  activeCat="All";term="";
-  document.getElementById('search').value='';
+  activeCat="All";term="";document.getElementById('search').value='';
   renderCats();renderGrid();
   const card=document.querySelector(`.card[data-pid="${currentNotifProdId}"]`);
   if(card){card.scrollIntoView({behavior:'smooth',block:'center'});card.classList.add('highlight');setTimeout(()=>card.classList.remove('highlight'),2200);}
@@ -715,13 +765,7 @@ document.getElementById('checkoutForm').addEventListener('submit',async e=>{
   const orderId='DHH-'+Math.floor(10000+Math.random()*89999);
   const items=Object.entries(cart).map(([id,qty])=>{const p=PRODUCTS.find(x=>x.id==id);return p?{id,name:p.name,qty,price:p.price}:null;}).filter(Boolean);
   const total=cartTotal();
-  const {error}=await supa.from('orders').insert({
-    order_code:orderId,user_id:session.user.id,
-    customer_name:document.getElementById('cName').value,
-    phone:document.getElementById('cPhone').value,
-    address:document.getElementById('cAddr').value,
-    items:items,total:total,payment_method:paymentMethod
-  });
+  const {error}=await supa.from('orders').insert({order_code:orderId,user_id:session.user.id,customer_name:document.getElementById('cName').value,phone:document.getElementById('cPhone').value,address:document.getElementById('cAddr').value,items:items,total:total,payment_method:paymentMethod});
   if(error){toast('Order failed: '+error.message);return;}
   lastOrderData={orderId,name:document.getElementById('cName').value,phone:document.getElementById('cPhone').value,address:document.getElementById('cAddr').value,items,total,payment:paymentMethod};
   document.getElementById('confirmText').innerHTML=`Order <strong>${orderId}</strong> for <strong>${fmt(total)}</strong><br>Expected delivery: within 24 hours.`;
@@ -732,8 +776,8 @@ document.getElementById('checkoutForm').addEventListener('submit',async e=>{
   e.target.reset();updatePayUI('COD');
 });
 
-/* Fast start */
-renderCats();updateBadge();refreshAuth();loadProducts().then(()=>startNotifs());
+/* Init */
+renderCats();updateBadge();refreshAuth();loadProducts().then(()=>{startNotifs();observeFadeIns();});
 </script>
 </body>
 </html>
