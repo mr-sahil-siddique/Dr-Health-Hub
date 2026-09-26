@@ -846,11 +846,29 @@ document.getElementById('reviewForm').addEventListener('submit',async e=>{
 });
 
 function addToCart(id,silent){
-  cart[id]=(cart[id]||0)+1;saveCart();updateBadge();
-  if(!silent){toast('Added to cart');document.getElementById('cartCount').classList.add('bounce');setTimeout(()=>document.getElementById('cartCount').classList.remove('bounce'),400);}
+  const currentQty = cart[id] || 0;
+  if (currentQty >= 10) {
+    toast('Maximum 10 units per product allowed');
+    return;
+  }
+  cart[id]=currentQty+1;saveCart();updateBadge();
+  if(!silent){
+    toast('Added to cart');
+    document.getElementById('cartCount').classList.add('bounce');
+    setTimeout(()=>document.getElementById('cartCount').classList.remove('bounce'),400);
+  }
 }
 function buyNow(id){addToCart(id,true);openCheckout();}
-function changeQty(id,delta){cart[id]=(cart[id]||0)+delta;if(cart[id]<=0)delete cart[id];saveCart();updateBadge();renderCart();}
+function changeQty(id,delta){
+  const newQty = (cart[id]||0)+delta;
+  if (newQty > 10) {
+    toast('Maximum 10 units per product allowed');
+    return;
+  }
+  cart[id]=newQty;
+  if(cart[id]<=0)delete cart[id];
+  saveCart();updateBadge();renderCart();
+}
 function removeItem(id){delete cart[id];saveCart();updateBadge();renderCart();}
 function cartTotal(){return Object.entries(cart).reduce((sum,[id,qty])=>{const p=PRODUCTS.find(x=>x.id==id);return sum+(p?p.price*qty:0);},0);}
 function updateBadge(){document.getElementById('cartCount').textContent=Object.values(cart).reduce((a,b)=>a+b,0);}
