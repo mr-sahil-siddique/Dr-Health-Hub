@@ -869,19 +869,6 @@ function buyNow(id){
   document.getElementById('drawer').classList.remove('show');
   document.getElementById('checkoutModal').classList.add('show');
 }
-  
-  // Clear cart and add only this product
-  cart = {};
-  cart[id] = 1;
-  saveCart();
-  updateBadge();
-  
-  // Open checkout
-  document.getElementById('checkoutTotal').textContent = fmt(cartTotal());
-  document.getElementById('overlay').classList.add('show');
-  document.getElementById('drawer').classList.remove('show');
-  document.getElementById('checkoutModal').classList.add('show');
-}
 function changeQty(id,delta){
   const newQty = (cart[id]||0)+delta;
   if (newQty > 10) {
