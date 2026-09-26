@@ -467,8 +467,14 @@ footer{background:var(--teal-dark);color:#dff5f2;padding:44px 24px 24px;font-siz
 
 <div class="modal" id="authModal">
   <div class="tabs"><button class="tab active" id="tabLogin" onclick="switchTab('login')">Login</button><button class="tab" id="tabSignup" onclick="switchTab('signup')">Sign Up</button></div>
-  <form id="loginForm"><div class="field"><label>Email</label><input type="email" id="loginEmail" required></div><div class="field"><label>Password</label><input type="password" id="loginPass" required></div><button class="btn btn-solid" style="width:100%;padding:12px" type="submit" id="loginBtn">Login</button></form>
-  <form id="signupForm" style="display:none"><div class="field"><label>Full Name</label><input type="text" id="suName" required></div><div class="field"><label>Email</label><input type="email" id="suEmail" required></div><div class="field"><label>Password</label><input type="password" id="suPass" required minlength="6"></div><button class="btn btn-solid" style="width:100%;padding:12px" type="submit" id="signupBtn">Create Account</button></form>
+  <form id="loginForm">
+  <div class="field"><label>Email</label><input type="email" id="loginEmail" required></div>
+  <div class="field"><label>Password</label><input type="password" id="loginPass" required></div>
+  <button class="btn btn-solid" style="width:100%;padding:12px" type="submit" id="loginBtn">Login</button>
+  <p style="text-align:center;margin-top:12px;font-size:.85rem">
+    <a href="#" onclick="forgotPassword();return false;" style="color:var(--teal);font-weight:600">Forgot Password?</a>
+  </p>
+</form>
   <button class="btn btn-outline" style="width:100%;padding:11px;margin-top:10px" onclick="closeAll()">Cancel</button>
 </div>
 
@@ -513,6 +519,24 @@ footer{background:var(--teal-dark);color:#dff5f2;padding:44px 24px 24px;font-siz
   </div>
   <div class="legal-content" id="legalContent"></div>
   <button class="btn btn-outline" style="width:100%;padding:12px;margin-top:14px" onclick="closeAll()">Close</button>
+</div>
+  <!-- ===== RESET PASSWORD MODAL ===== -->
+<div class="modal" id="resetPasswordModal" role="dialog" aria-label="Reset password">
+  <h3 style="text-align:center">🔐 Reset Password</h3>
+  <p style="text-align:center;color:var(--muted);font-size:.85rem;margin-top:6px">Enter your new password below</p>
+  <form id="resetPasswordForm">
+    <div class="field">
+      <label>New Password</label>
+      <input type="password" id="newPassword" required minlength="6" placeholder="Minimum 6 characters">
+    </div>
+    <div class="field">
+      <label>Confirm New Password</label>
+      <input type="password" id="confirmPassword" required minlength="6" placeholder="Re-enter password">
+    </div>
+    <p id="resetError" style="text-align:center;color:#e53935;font-size:.85rem;margin-top:8px;display:none"></p>
+    <button class="btn btn-solid" style="width:100%;padding:12px" type="submit" id="resetBtn">Update Password</button>
+    <button class="btn btn-outline" style="width:100%;padding:11px;margin-top:10px" type="button" onclick="closeAll()">Cancel</button>
+  </form>
 </div>
 
 <div class="notif-pop" id="notifPop" onclick="clickNotif()">
@@ -997,7 +1021,87 @@ document.getElementById('checkoutForm').addEventListener('submit',async e=>{
   document.getElementById('confirmModal').classList.add('show');
   e.target.reset();updatePayUI('COD');
 });
+/* ===== FORGOT PASSWORD ===== */
+async function forgotPassword(){
+  const email = document.getElementById('loginEmail').value.trim();
+  if(!email){
+    toast('Please enter your email first');
+    document.getElementById('loginEmail').focus();
+    return;
+  }
+  
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    toast('Please enter a valid email address');
+    return;
+  }
+  
+  const {error} = await supa.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin + '/'
+  });
+  
+  if(error){
+    toast('Error: ' + error.message);
+    return;
+  }
+  
+  toast('Password reset link sent to ' + email);
+}
 
+/* ===== PASSWORD RECOVERY HANDLER ===== */
+supa.auth.onAuthStateChange(async (event, session) => {
+  if (event === 'PASSWORD_RECOVERY') {
+    document.getElementById('overlay').classList.add('show');
+    document.getElementById('resetPasswordModal').classList.add('show');
+    document.getElementById('authModal').classList.remove('show');
+  }
+});
+
+/* ===== RESET PASSWORD FORM ===== */
+document.getElementById('resetPasswordForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const p1 = document.getElementById('newPassword').value;
+  const p2 = document.getElementById('confirmPassword').value;
+  const errorEl = document.getElementById('resetError');
+  
+  errorEl.style.display = 'none';
+  
+  if(p1 !== p2){
+    errorEl.textContent = 'Passwords do not match';
+    errorEl.style.display = 'block';
+    return;
+  }
+  
+  if(p1.length < 6){
+    errorEl.textContent = 'Password must be at least 6 characters';
+    errorEl.style.display = 'block';
+    return;
+  }
+  
+  const btn = document.getElementById('resetBtn');
+  btn.disabled = true;
+  btn.textContent = 'Updating...';
+  
+  const {error} = await supa.auth.updateUser({ password: p1 });
+  
+  btn.disabled = false;
+  btn.textContent = 'Update Password';
+  
+  if(error){
+    errorEl.textContent = error.message;
+    errorEl.style.display = 'block';
+    return;
+  }
+  
+  toast('Password updated successfully!');
+  closeAll();
+  
+  setTimeout(async () => {
+    await supa.auth.signOut();
+    toast('Please login with your new password');
+  }, 1500);
+});
+
+/* ===== INIT ===== */
 renderCats();updateBadge();refreshAuth();loadProducts().then(()=>{startNotifs();observeFadeIns();});
 </script>
 </body>
