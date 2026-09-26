@@ -851,7 +851,13 @@ function addToCart(id,silent){
     setTimeout(()=>document.getElementById('cartCount').classList.remove('bounce'),400);
   }
 }
-function buyNow(id){addToCart(id,true);openCheckout();}
+function buyNow(id){
+  cart = {};
+  cart[id] = 1;
+  saveCart();
+  updateBadge();
+  openCheckout();
+}
 function changeQty(id,delta){
   const newQty = (cart[id]||0)+delta;
   if (newQty > 10) {
