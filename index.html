@@ -270,7 +270,60 @@ footer{background:var(--teal-dark);color:#dff5f2;padding:44px 24px 24px;font-siz
 .legal-content ul{margin:8px 0 14px;padding-left:22px;color:var(--muted)}
 .legal-content li{margin-bottom:6px}
 .legal-content .updated{font-size:.75rem;color:var(--muted);font-style:italic;margin-top:16px;padding-top:12px;border-top:1px solid var(--border)}
-
+/* ===== PRODUCT DETAIL MODAL (Amazon/Daraz Style) ===== */
+.product-detail-modal{width:min(900px,96vw);max-height:94vh;padding:0;overflow:hidden;display:flex;flex-direction:column}
+.pd-header{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid var(--border);background:var(--card);flex-shrink:0}
+.pd-back{display:flex;align-items:center;gap:6px;background:transparent;border:1.5px solid var(--teal);color:var(--teal);padding:8px 14px;border-radius:10px;font-weight:600;font-size:.85rem;cursor:pointer;transition:all .2s}
+.pd-back:hover{background:var(--teal);color:#fff}
+.pd-back svg{width:16px;height:16px}
+#productDetailContent{overflow-y:auto;padding:24px;flex:1}
+.pd-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-bottom:24px}
+@media(max-width:700px){.pd-grid{grid-template-columns:1fr;gap:20px}}
+.pd-image-box{width:100%;aspect-ratio:1;background:#fff;border-radius:16px;display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid var(--border);padding:16px}
+.pd-image-box img{width:100%;height:100%;object-fit:contain}
+.pd-image-box .pd-emoji{font-size:6rem}
+.pd-details h2{font-size:1.6rem;color:var(--text);margin-bottom:8px;line-height:1.2}
+.pd-cat-badge{display:inline-block;background:rgba(14,124,134,.1);color:var(--teal);font-size:.72rem;font-weight:700;padding:4px 10px;border-radius:6px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.pd-rating-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;cursor:pointer;padding:6px 10px;border-radius:8px;transition:background .15s;width:fit-content}
+.pd-rating-row:hover{background:rgba(14,124,134,.08)}
+.pd-rating-row .stars{color:var(--star);font-size:1.1rem;letter-spacing:2px}
+.pd-rating-row .num{font-weight:700;color:var(--text);font-size:.95rem}
+.pd-rating-row .rev-link{color:var(--teal);font-size:.85rem;font-weight:600;text-decoration:underline}
+.pd-price-tag{font-size:2.2rem;font-weight:800;color:var(--text);margin:10px 0;line-height:1}
+.pd-stock-row{display:flex;align-items:center;gap:8px;font-size:.9rem;color:var(--success);font-weight:600;margin-bottom:16px}
+.pd-stock-row::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--success);animation:pulse 2s infinite}
+.pd-desc-text{color:var(--muted);font-size:.95rem;line-height:1.7;margin-bottom:20px}
+.pd-rx-alert{background:rgba(255,138,61,.1);border:1px solid rgba(255,138,61,.35);border-radius:12px;padding:12px 16px;font-size:.85rem;color:var(--muted);line-height:1.5;margin-bottom:16px}
+.pd-rx-alert strong{color:#e65100}
+.pd-qty-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:8px}
+.pd-qty-box{display:flex;align-items:center;border:2px solid var(--border);border-radius:12px;overflow:hidden}
+.pd-qty-box button{width:44px;height:48px;border:none;background:var(--bg);color:var(--text);font-size:1.3rem;font-weight:700;cursor:pointer;transition:background .15s}
+.pd-qty-box button:hover{background:var(--teal);color:#fff}
+.pd-qty-box span{width:50px;text-align:center;font-weight:700;font-size:1.1rem}
+.pd-btn-cart,.pd-btn-buy{flex:1;min-width:140px;padding:14px 20px;border-radius:12px;font-weight:700;font-size:.95rem;cursor:pointer;transition:all .2s;border:none}
+.pd-btn-cart{background:transparent;border:2px solid var(--teal);color:var(--teal)}
+.pd-btn-cart:hover{background:var(--teal);color:#fff}
+.pd-btn-buy{background:var(--accent);color:#fff}
+.pd-btn-buy:hover{background:var(--accent-dark);transform:translateY(-1px)}
+.pd-section{background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:16px}
+.pd-section h3{font-size:1.05rem;color:var(--teal);margin-bottom:14px;display:flex;align-items:center;gap:8px;font-weight:700}
+.pd-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;font-size:.88rem}
+@media(max-width:480px){.pd-info-grid{grid-template-columns:1fr}}
+.pd-info-item{display:flex;flex-direction:column;gap:4px}
+.pd-info-item .lbl{color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.4px;font-weight:600}
+.pd-info-item .val{color:var(--text);font-weight:600;font-size:.92rem}
+.pd-review-item{padding:14px 0;border-bottom:1px solid var(--border)}
+.pd-review-item:last-child{border-bottom:none;padding-bottom:0}
+.pd-review-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.pd-review-name{font-weight:700;font-size:.9rem;color:var(--text);display:flex;align-items:center;gap:8px}
+.pd-review-verified{background:rgba(31,169,113,.12);color:var(--success);font-size:.65rem;font-weight:700;padding:2px 7px;border-radius:5px;text-transform:uppercase}
+.pd-review-stars{color:var(--star);font-size:.95rem;letter-spacing:1.5px;margin-bottom:6px}
+.pd-review-comment{font-size:.88rem;color:var(--muted);line-height:1.6}
+.pd-review-date{font-size:.72rem;color:var(--muted);white-space:nowrap}
+.pd-no-reviews{text-align:center;color:var(--muted);padding:24px 0;font-size:.9rem}
+.pd-write-review-btn{width:100%;margin-top:14px;padding:12px;background:transparent;border:1.5px solid var(--teal);color:var(--teal);border-radius:10px;font-weight:600;font-size:.9rem;cursor:pointer;transition:all .2s}
+.pd-write-review-btn:hover{background:var(--teal);color:#fff}
+.pd-loading{text-align:center;padding:20px;color:var(--muted);font-size:.9rem}
 /* ===== ADMIN PIN MODAL ===== */
 .pin-input-wrap{display:flex;justify-content:center;gap:10px;margin:20px 0}
 .pin-input-wrap input{width:50px;height:56px;text-align:center;font-size:1.5rem;font-weight:700;border:2px solid var(--border);border-radius:12px;background:var(--bg);color:var(--text);transition:border-color .2s}
@@ -544,7 +597,17 @@ footer{background:var(--teal-dark);color:#dff5f2;padding:44px 24px 24px;font-siz
     <button class="btn btn-outline" style="width:100%;padding:11px;margin-top:10px" type="button" onclick="closeAll()">Cancel</button>
   </form>
 </div>
-
+<!-- ===== PRODUCT DETAIL MODAL ===== -->
+<div class="modal product-detail-modal" id="productDetailModal" role="dialog" aria-label="Product details">
+  <div class="pd-header">
+    <button class="pd-back" onclick="closeProductDetail()" aria-label="Back">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      <span>Back</span>
+    </button>
+    <button class="iconbtn" onclick="closeProductDetail()" aria-label="Close">✕</button>
+  </div>
+  <div id="productDetailContent"></div>
+</div>
 <div class="notif-pop" id="notifPop" onclick="clickNotif()">
   <div class="np-icon" id="npIcon">💊</div>
   <div class="np-body"><div class="np-head"><span class="np-dot"></span>Recent Order</div><div class="np-title" id="npTitle"></div><div class="np-msg" id="npMsg"></div><span class="np-time" id="npTime"></span></div>
@@ -788,13 +851,13 @@ function renderGrid(){
   const items=PRODUCTS.filter(p=>(activeCat==="All"||p.cat===activeCat)&&p.name.toLowerCase().includes(term.toLowerCase()));
   if(!items.length){grid.innerHTML='<div class="empty">No medicines match your search.</div>';return;}
   grid.innerHTML=items.map(p=>`
-    <div class="card fade-in" data-pid="${p.id}">
+  <div class="card fade-in" data-pid="${p.id}" onclick="openProductDetail(${p.id})" style="cursor:pointer">
       <div class="avatar">${p.img ? `<img src="${p.img}" alt="${p.name}" loading="lazy">` : p.icon}</div>
       <span class="tag">${p.cat}</span>
       ${p.requires_prescription ? '<span class="rx-badge">⚠️ Rx Required</span>' : ''}
       <h4>${p.name}</h4>
       <p class="desc">${p.desc}</p>
-      <div class="rating" onclick="openReviews(${p.id})">
+      <div class="rating" onclick="event.stopPropagation();openReviews(${p.id})">
         <span class="stars">${stars(p.rating)}</span>
         <span>${p.rating.toFixed(1)}</span>
         <span class="count">(${p.reviewsCount})</span>
@@ -803,10 +866,10 @@ function renderGrid(){
       <span class="stock">In Stock</span>
       <div class="price">${fmt(p.price)}</div>
       <div class="card-actions">
-        <button class="btn btn-outline" onclick="addToCart(${p.id})">Add to Cart</button>
-        <button class="btn btn-solid" onclick="buyNow(${p.id})">Buy Now</button>
+      <button class="btn btn-outline" onclick="event.stopPropagation();addToCart(${p.id})">Add to Cart</button>
+      <button class="btn btn-solid" onclick="event.stopPropagation();buyNow(${p.id})">Buy Now</button>
       </div>
-      <button class="btn btn-outline" style="width:100%;margin-top:6px;font-size:.78rem;padding:8px" onclick="openReview(${p.id})">⭐ Write Review</button>
+      <button class="btn btn-outline" style="width:100%;margin-top:6px;font-size:.78rem;padding:8px" onclick="event.stopPropagation();openReview(${p.id})">⭐ Write Review</button>
     </div>`).join('');
   observeFadeIns();
 }
@@ -939,8 +1002,8 @@ function closeAll(){
     updateBadge();
     window._buyNowActive = false;
   }
-  ['overlay','drawer','sideMenu','adminDrawer','checkoutModal','confirmModal','authModal','myOrdersModal','reviewModal','viewReviewsModal','adminPinModal','legalModal','resetPasswordModal'].forEach(id=>{
-    const el=document.getElementById(id);if(el)el.classList.remove('show');
+  ['overlay','drawer','sideMenu','adminDrawer','checkoutModal','confirmModal','authModal','myOrdersModal','reviewModal','viewReviewsModal','adminPinModal','legalModal','resetPasswordModal','productDetailModal'].forEach(id=>{
+  const el=document.getElementById(id);if(el)el.classList.remove('show');
   });
 }
 document.getElementById('menuBtn').addEventListener('click',()=>{
@@ -1092,7 +1155,171 @@ if(resetFormEl){
     }, 1500);
   });
 }
+/* ===== PRODUCT DETAIL MODAL (Amazon/Daraz Style) ===== */
+let currentDetailProductId = null;
+let detailQty = 1;
 
+function openProductDetail(id){
+  const p = PRODUCTS.find(x => x.id === id);
+  if(!p) return;
+  
+  currentDetailProductId = id;
+  detailQty = 1;
+  
+  renderProductDetail(p);
+  
+  document.getElementById('overlay').classList.add('show');
+  document.getElementById('productDetailModal').classList.add('show');
+  
+  // Prevent background scroll
+  document.body.style.overflow = 'hidden';
+}
+
+function renderProductDetail(p){
+  const imgHtml = p.img 
+    ? `<img src="${p.img}" alt="${p.name}">` 
+    : `<span class="pd-emoji">${p.icon}</span>`;
+  
+  const rxAlert = p.requires_prescription 
+    ? `<div class="pd-rx-alert"><strong>⚠️ Prescription Required:</strong> This medicine requires a valid prescription from a registered medical practitioner. Please send your prescription via WhatsApp after ordering.</div>` 
+    : '';
+  
+  document.getElementById('productDetailContent').innerHTML = `
+    <div class="pd-grid">
+      <div class="pd-image-box">${imgHtml}</div>
+      <div class="pd-details">
+        <span class="pd-cat-badge">${p.cat}</span>
+        <h2>${p.name}</h2>
+        <div class="pd-rating-row" onclick="closeProductDetail();openReviews(${p.id})">
+          <span class="stars">${stars(p.rating)}</span>
+          <span class="num">${p.rating.toFixed(1)}</span>
+          <span class="rev-link">${p.reviewsCount} reviews</span>
+        </div>
+        <div class="pd-price-tag">${fmt(p.price)}</div>
+        <div class="pd-stock-row">In Stock</div>
+        <p class="pd-desc-text">${p.desc || 'No description available.'}</p>
+        ${rxAlert}
+        <div class="pd-qty-actions">
+          <div class="pd-qty-box">
+            <button onclick="detailQtyChange(-1)" aria-label="Decrease quantity">−</button>
+            <span id="pdQtyValue">1</span>
+            <button onclick="detailQtyChange(1)" aria-label="Increase quantity">+</button>
+          </div>
+          <button class="pd-btn-cart" onclick="addToCartFromDetail()">Add to Cart</button>
+          <button class="pd-btn-buy" onclick="buyNowFromDetail()">Buy Now</button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="pd-section">
+      <h3>📋 Product Information</h3>
+      <div class="pd-info-grid">
+        <div class="pd-info-item"><span class="lbl">Category</span><span class="val">${p.cat}</span></div>
+        <div class="pd-info-item"><span class="lbl">Product ID</span><span class="val">#${p.id}</span></div>
+        <div class="pd-info-item"><span class="lbl">Availability</span><span class="val" style="color:var(--success)">In Stock</span></div>
+        <div class="pd-info-item"><span class="lbl">Prescription</span><span class="val">${p.requires_prescription ? '⚠️ Required' : '✅ Not Required'}</span></div>
+      </div>
+    </div>
+    
+    <div class="pd-section">
+      <h3>⚠️ Important Information</h3>
+      <p style="font-size:.88rem;color:var(--muted);line-height:1.7;margin:0">
+        Always read the label and follow the directions for use. Keep out of reach of children. Store in a cool, dry place away from direct sunlight. If symptoms persist, consult your doctor immediately. This information is for general guidance only and does not replace professional medical advice.
+      </p>
+    </div>
+    
+    <div class="pd-section">
+      <h3>💬 Customer Reviews</h3>
+      <div id="pdReviewsList">
+        <div class="pd-loading">Loading reviews...</div>
+      </div>
+      <button class="pd-write-review-btn" onclick="closeProductDetail();openReview(${p.id})">⭐ Write a Review</button>
+    </div>
+  `;
+  
+  loadProductReviews(p.id);
+}
+
+async function loadProductReviews(productId){
+  const listEl = document.getElementById('pdReviewsList');
+  if(!listEl) return;
+  
+  const {data, error} = await supa
+    .from('reviews')
+    .select('user_name, rating, comment, created_at')
+    .eq('product_id', productId)
+    .order('created_at', {ascending: false})
+    .limit(6);
+  
+  if(error || !data || !data.length){
+    listEl.innerHTML = '<div class="pd-no-reviews">No reviews yet. Be the first to review!</div>';
+    return;
+  }
+  
+  listEl.innerHTML = data.map(r => {
+    const date = new Date(r.created_at);
+    const days = Math.floor((Date.now() - date.getTime()) / (1000*60*60*24));
+    const when = days < 1 ? 'today' : days === 1 ? '1 day ago' : days < 30 ? days + ' days ago' : Math.floor(days/30) + ' months ago';
+    const safeName = (r.user_name || 'Anonymous').replace(/[<>]/g, '');
+    const safeComment = (r.comment || '').replace(/[<>]/g, '');
+    return `<div class="pd-review-item">
+      <div class="pd-review-head">
+        <span class="pd-review-name">${safeName} <span class="pd-review-verified">✓ Verified</span></span>
+        <span class="pd-review-date">${when}</span>
+      </div>
+      <div class="pd-review-stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div>
+      <div class="pd-review-comment">${safeComment}</div>
+    </div>`;
+  }).join('');
+}
+
+function detailQtyChange(delta){
+  detailQty = detailQty + delta;
+  if(detailQty < 1) detailQty = 1;
+  if(detailQty > 10) detailQty = 10;
+  const qtyEl = document.getElementById('pdQtyValue');
+  if(qtyEl) qtyEl.textContent = detailQty;
+}
+
+function addToCartFromDetail(){
+  if(!currentDetailProductId) return;
+  cart[currentDetailProductId] = detailQty;
+  if(cart[currentDetailProductId] > 10) cart[currentDetailProductId] = 10;
+  saveCart();
+  updateBadge();
+  toast('Added ' + detailQty + ' to cart');
+  const badge = document.getElementById('cartCount');
+  badge.classList.add('bounce');
+  setTimeout(() => badge.classList.remove('bounce'), 400);
+}
+
+function buyNowFromDetail(){
+  if(!currentDetailProductId) return;
+  if(!session){
+    toast('Please login to place an order');
+    closeProductDetail();
+    setTimeout(openAuth, 300);
+    return;
+  }
+  const pid = currentDetailProductId;
+  const qty = detailQty;
+  closeProductDetail();
+  window._buyNowActive = true;
+  cart = {};
+  cart[pid] = qty;
+  saveCart();
+  updateBadge();
+  document.getElementById('checkoutTotal').textContent = fmt(cartTotal());
+  document.getElementById('overlay').classList.add('show');
+  document.getElementById('checkoutModal').classList.add('show');
+}
+
+function closeProductDetail(){
+  document.getElementById('productDetailModal').classList.remove('show');
+  currentDetailProductId = null;
+  detailQty = 1;
+  document.body.style.overflow = '';
+}
 /* ===== INIT ===== */
 renderCats();updateBadge();refreshAuth();loadProducts().then(()=>{startNotifs();observeFadeIns();});
 </script>
