@@ -82,6 +82,8 @@
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:20px;padding-bottom:20px}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;transition:transform .25s,box-shadow .25s,border-color .25s;cursor:pointer}
 .card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);border-color:var(--primary)}
+.card.highlight{box-shadow:0 0 0 3px var(--accent);animation:highlightPulse 2s ease}
+@keyframes highlightPulse{0%{box-shadow:0 0 0 6px rgba(255,138,61,.5)}100%{box-shadow:0 0 0 3px var(--accent)}}
 .card-media{display:block;aspect-ratio:4/3;background:var(--media-bg);position:relative;overflow:hidden}
 .card-media img{width:100%;height:100%;object-fit:contain;padding:12px;transition:transform .4s}
 .card:hover .card-media img{transform:scale(1.06)}
@@ -254,7 +256,27 @@
 @keyframes waPulse{0%,100%{box-shadow:0 8px 24px rgba(37,211,102,.45)}50%{box-shadow:0 8px 24px rgba(37,211,102,.65),0 0 0 12px rgba(37,211,102,.12)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 @media(max-width:480px){.wa-float{bottom:16px;right:14px}.wa-circle{width:54px;height:54px}.wa-tip{display:none}}
-
+/* ===== NOTIFICATION POPUP (bottom-left) ===== */
+.notif-pop{position:fixed;bottom:24px;left:20px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 16px 14px 14px;box-shadow:var(--shadow-md);display:flex;gap:12px;align-items:flex-start;z-index:45;width:min(340px,calc(100vw - 40px));transform:translateX(calc(-100% - 30px));opacity:0;transition:transform .4s cubic-bezier(.16,1,.3,1),opacity .3s ease;pointer-events:none;cursor:pointer}
+.notif-pop.show{transform:translateX(0);opacity:1;pointer-events:auto}
+.notif-pop:hover{box-shadow:var(--shadow-lg)}
+.notif-pop .np-icon{width:44px;height:44px;border-radius:11px;background:var(--tint);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;overflow:hidden;color:var(--primary);position:relative;border:1px solid var(--border)}
+.notif-pop .np-icon img{width:100%;height:100%;object-fit:contain;background:#fff;padding:3px}
+.notif-pop .np-icon .np-badge{position:absolute;bottom:-4px;right:-4px;background:var(--accent);color:#fff;font-size:.6rem;padding:2px 5px;border-radius:6px;font-weight:700;border:2px solid var(--surface)}
+.notif-pop .np-body{flex:1;min-width:0}
+.notif-pop .np-head{display:flex;align-items:center;gap:6px;font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;font-weight:700;margin-bottom:4px}
+.notif-pop .np-head .np-dot{width:7px;height:7px;border-radius:50%;background:var(--success);animation:pulse 1.8s infinite}
+.notif-pop .np-title{font-size:.86rem;font-weight:700;color:var(--text);margin-bottom:2px;line-height:1.3}
+.notif-pop .np-title strong{color:var(--primary)}
+.notif-pop .np-msg{font-size:.82rem;color:var(--muted);line-height:1.35}
+.notif-pop .np-msg strong{color:var(--text);font-weight:600}
+.notif-pop .np-time{font-size:.72rem;color:var(--muted);margin-top:5px;display:block}
+.notif-pop .np-close{background:none;border:none;color:var(--muted);font-size:.9rem;padding:2px 4px;line-height:1;flex-shrink:0;align-self:flex-start;margin-top:-2px}
+.notif-pop .np-close:hover{color:var(--danger)}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+@media(max-width:480px){
+  .notif-pop{bottom:16px;left:10px;right:10px;width:auto}
+}
 /* ===== REVEAL ===== */
 .reveal{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s ease;transition-delay:var(--d,0s)}
 .reveal.visible{opacity:1;transform:none}
@@ -592,7 +614,17 @@
     <button class="btn btn-outline btn-block" style="padding:11px;margin-top:10px" type="button" onclick="closeAll()">Cancel</button>
   </form>
 </div>
-
+<!-- ===== NOTIFICATION (bottom-left) ===== -->
+<div class="notif-pop" id="notifPop" onclick="clickNotif()" role="alert">
+  <div class="np-icon" id="npIcon">💊</div>
+  <div class="np-body">
+    <div class="np-head"><span class="np-dot"></span>Recent Order</div>
+    <div class="np-title" id="npTitle"></div>
+    <div class="np-msg" id="npMsg"></div>
+    <span class="np-time" id="npTime"></span>
+  </div>
+  <button class="np-close" onclick="event.stopPropagation();hideNotif()" aria-label="Close">✕</button>
+</div>
 <div class="wa-float" id="waFloat">
   <div class="wa-tip" id="waTip"><span>Need help? Chat on WhatsApp</span><button onclick="dismissWaTip()" aria-label="Dismiss">✕</button></div>
   <button class="wa-circle" onclick="openWhatsAppSupport()" aria-label="Chat on WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></button>
@@ -1188,7 +1220,57 @@ async function submitAdminPin(){
     }).join('')||'<div class="review-empty">No orders yet.</div>');
   openLayer('adminDrawer');
 }
+/* =====================================================================
+   NOTIFICATION (bottom-left, recent orders)
+   ===================================================================== */
+const FAKE_ORDERS=[
+  {name:"Ahmed Raza", city:"Lahore", time:"just now"},
+  {name:"Fatima Khan", city:"Karachi", time:"1 minute ago"},
+  {name:"Bilal Hussain", city:"Islamabad", time:"2 minutes ago"},
+  {name:"Ayesha Malik", city:"Rawalpindi", time:"3 minutes ago"},
+  {name:"Usman Tariq", city:"Multan", time:"4 minutes ago"},
+  {name:"Sana Iqbal", city:"Faisalabad", time:"5 minutes ago"},
+  {name:"Hassan Ali", city:"Peshawar", time:"6 minutes ago"},
+  {name:"Maryam Noor", city:"Quetta", time:"7 minutes ago"}
+];
+let fakeOrderIndex=0;
+let notifTimer=null;
+let currentNotifProdId=null;
 
+function showNotif(){
+  if(!PRODUCTS.length)return;
+  const cust=FAKE_ORDERS[fakeOrderIndex%FAKE_ORDERS.length];fakeOrderIndex++;
+  const prod=PRODUCTS[Math.floor(Math.random()*PRODUCTS.length)];
+  currentNotifProdId=prod.id;
+  const pop=$('notifPop');
+  if(!pop)return;
+  $('npIcon').innerHTML=(prod.img?`<img src="${esc(prod.img)}" alt="${esc(prod.name)}" loading="lazy">`:'💊')+`<span class="np-badge">${fmt(prod.price).replace('Rs. ','')}</span>`;
+  $('npTitle').innerHTML=`<strong>${esc(cust.name)}</strong> from ${esc(cust.city)}`;
+  $('npMsg').innerHTML=`just ordered <strong>${esc(prod.name)}</strong>`;
+  $('npTime').textContent=cust.time;
+  pop.classList.add('show');
+  clearTimeout(notifTimer);
+  notifTimer=setTimeout(hideNotif,7000);
+}
+function hideNotif(){const p=$('notifPop');if(p)p.classList.remove('show');}
+function clickNotif(){
+  if(!currentNotifProdId){hideNotif();return;}
+  const card=document.querySelector(`.card[data-pid="${currentNotifProdId}"]`);
+  if(card){
+    card.scrollIntoView({behavior:'smooth',block:'center'});
+    card.classList.add('highlight');
+    setTimeout(()=>card.classList.remove('highlight'),2200);
+  }
+  hideNotif();
+}
+function startNotifs(){
+  setTimeout(()=>{
+    showNotif();
+    setInterval(()=>{
+      if(!$('notifPop').classList.contains('show'))showNotif();
+    },15000);
+  },5000);
+}
 /* =====================================================================
    INIT
    ===================================================================== */
@@ -1227,6 +1309,7 @@ document.addEventListener('DOMContentLoaded',async()=>{
   supa.auth.onAuthStateChange(event=>{if(event==='PASSWORD_RECOVERY')openLayer('resetPasswordModal');});
 
   await Promise.all([refreshAuth(),loadProducts()]);
+  startNotifs();
   loadHomeReviews();
 
   /* deep links coming from product.html / other pages */
