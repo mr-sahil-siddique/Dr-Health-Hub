@@ -32,10 +32,7 @@
   --border:#e3ebea; --success:#1fa971; --star:#f5b301;
   --whatsapp:#25D366; --whatsapp-dark:#128C7E;
 }
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){--bg:#0f1716;--card:#17201f;--text:#eef4f3;--muted:#9db0af;--border:#263231}
-}
-:root[data-theme="dark"]{--bg:#0f1716;--card:#17201f;--text:#eef4f3;--muted:#9db0af;--border:#263231}
+
 html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
 *{box-sizing:border-box}
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
@@ -223,7 +220,7 @@ main h3.section{font-size:1.5rem;margin:20px 0 22px}
 .rating-summary .info .count{font-size:.78rem;color:var(--muted);margin-top:3px}
 
 /* ===== NOTIFICATION ===== */
-.notif-pop{position:fixed;top:calc(115px + env(safe-area-inset-top,0px));right:20px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px 14px 14px;box-shadow:0 14px 40px rgba(0,0,0,.22);display:flex;gap:12px;align-items:flex-start;z-index:45;width:min(360px,calc(100vw - 40px));transform:translateX(calc(100% + 30px));opacity:0;transition:transform .4s cubic-bezier(.16,1,.3,1),opacity .3s ease;pointer-events:none;cursor:pointer}
+.notif-pop{position:fixed;bottom:24px;left:20px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px 14px 14px;box-shadow:0 14px 40px rgba(0,0,0,.22);display:flex;gap:12px;align-items:flex-start;z-index:45;width:min(360px,calc(100vw - 40px));transform:translateX(calc(-100% - 30px));opacity:0;transition:transform .4s cubic-bezier(.16,1,.3,1),opacity .3s ease;pointer-events:none;cursor:pointer}
 .notif-pop.show{transform:translateX(0);opacity:1;pointer-events:auto}
 .notif-pop .np-icon{width:46px;height:46px;border-radius:11px;background:linear-gradient(135deg,var(--teal) 0%,var(--blue) 100%);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;overflow:hidden;color:#fff;position:relative}
 .notif-pop .np-icon img{width:100%;height:100%;object-fit:cover}
@@ -332,7 +329,7 @@ footer{background:var(--teal-dark);color:#dff5f2;padding:44px 24px 24px;font-siz
 
 /* ===== RESPONSIVE ===== */
 @media(max-width:480px){
-  .notif-pop{top:calc(105px + env(safe-area-inset-top,0px));right:10px;left:10px;width:auto}
+  .notif-pop{bottom:16px;left:10px;right:10px;width:auto}
   .wa-float{bottom:16px;right:16px;gap:8px}
   .wa-float .wa-tip{padding:10px 14px;font-size:.82rem}
   .wa-float .wa-btn-circle{width:56px;height:56px}
@@ -851,7 +848,7 @@ function renderGrid(){
   const items=PRODUCTS.filter(p=>(activeCat==="All"||p.cat===activeCat)&&p.name.toLowerCase().includes(term.toLowerCase()));
   if(!items.length){grid.innerHTML='<div class="empty">No medicines match your search.</div>';return;}
   grid.innerHTML=items.map(p=>`
-  <div class="card fade-in" data-pid="${p.id}" onclick="openProductDetail(${p.id})" style="cursor:pointer">
+      <div class="card fade-in" data-pid="${p.id}" onclick="window.location.href='product.html?id=${p.id}'" style="cursor:pointer">
       <div class="avatar">${p.img ? `<img src="${p.img}" alt="${p.name}" loading="lazy">` : p.icon}</div>
       <span class="tag">${p.cat}</span>
       ${p.requires_prescription ? '<span class="rx-badge">⚠️ Rx Required</span>' : ''}
