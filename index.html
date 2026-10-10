@@ -758,18 +758,12 @@ function openLegal(type){
 function showGridSkeleton(){
   $('grid').innerHTML=Array.from({length:8},()=>`<div class="sk-card"><div class="skeleton sk-img"></div><div class="sk-body"><div class="skeleton" style="height:12px;width:40%"></div><div class="skeleton" style="height:18px;width:80%"></div><div class="skeleton" style="height:12px;width:95%"></div><div class="skeleton" style="height:38px"></div></div></div>`).join('');
 }
-async function loadProducts(){
-  showGridSkeleton();
-  if(!supa){
-    $('grid').innerHTML=`<div class="empty"><span class="big">📡</span>Could not connect to the store. Please check your internet and refresh.<br><br><button class="btn btn-wa" onclick="openWhatsAppSupport()">Order on WhatsApp</button></div>`;
-    return;
-  }
-  const {data,error}=await supa.from('products').select('*').order('id');
-  if(error||!data){
-    $('grid').innerHTML=`<div class="empty"><span class="big">⚠️</span>Medicines could not be loaded.<br><br><button class="btn btn-primary" onclick="loadProducts()">Try again</button></div>`;
-    return;
-  }
-  PRODUCTS=data.map(p=>({
+/* Speed: products are cached for 10 minutes in this tab, so repeat visits / back-navigation render instantly,
+   then fresh data is fetched in the background (and the grid only re-renders if something changed). */
+const CACHE_KEY='dhh_products_v1';
+let lastRaw='';
+function applyProducts(rows){
+  PRODUCTS=rows.map(p=>({
     id:p.id,name:p.name||'Unnamed',cat:p.category||'Other',price:Number(p.price)||0,icon:"💊",
     img:p.image_url,desc:p.description||"",
     rating:Number(p.rating)||0,reviewsCount:p.reviews_count||0,
@@ -784,6 +778,28 @@ async function loadProducts(){
   Object.keys(cart).forEach(k=>{if(!byId(k)){delete cart[k];changed=true;}});
   if(changed)saveCart();
   updateBadge();renderCats();renderGrid();
+}
+async function loadProducts(){
+  let hadCache=false;
+  try{
+    const c=JSON.parse(sessionStorage.getItem(CACHE_KEY)||'null');
+    if(c&&Array.isArray(c.d)&&c.d.length&&Date.now()-c.t<600000){lastRaw=JSON.stringify(c.d);applyProducts(c.d);hadCache=true;}
+  }catch(e){}
+  if(!hadCache)showGridSkeleton();
+  if(!supa){
+    if(!hadCache)$('grid').innerHTML=`<div class="empty"><span class="big">📡</span>Could not connect to the store. Please check your internet and refresh.<br><br><button class="btn btn-wa" onclick="openWhatsAppSupport()">Order on WhatsApp</button></div>`;
+    return;
+  }
+  const {data,error}=await supa.from('products').select('*').order('id');
+  if(error||!data){
+    if(!hadCache)$('grid').innerHTML=`<div class="empty"><span class="big">⚠️</span>Medicines could not be loaded.<br><br><button class="btn btn-primary" onclick="loadProducts()">Try again</button></div>`;
+    return;
+  }
+  const raw=JSON.stringify(data);
+  try{sessionStorage.setItem(CACHE_KEY,JSON.stringify({t:Date.now(),d:data}));}catch(e){}
+  if(hadCache&&raw===lastRaw)return;   /* nothing changed — no re-render, no flicker */
+  lastRaw=raw;
+  applyProducts(data);
 }
 function visibleProducts(){
   const q=term.trim().toLowerCase();
