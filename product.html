@@ -39,6 +39,8 @@
 .rating-row .stars{color:var(--star);font-size:1.15rem;letter-spacing:2px}
 .rating-row u{color:var(--primary);font-weight:600}
 .price{font-size:clamp(2rem,4vw,2.6rem);font-weight:800;font-family:'Poppins',sans-serif;margin:8px 0}
+.price-old{text-decoration:line-through;color:var(--muted);font-size:1.2rem;font-weight:500;margin-right:10px}
+.price-off{background:#16a34a;color:#fff;font-size:.78rem;font-weight:700;padding:4px 12px;border-radius:8px;text-transform:uppercase;letter-spacing:.3px;margin-left:10px;display:inline-block;vertical-align:middle}
 .stock{display:flex;align-items:center;gap:8px;color:var(--success);font-weight:600;margin-bottom:16px}
 .stock::before{content:"";width:10px;height:10px;border-radius:50%;background:currentColor}
 .stock.out{color:var(--danger)}
@@ -90,6 +92,8 @@
 @media(max-width:820px){
   .buybar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:35;background:var(--surface);border-top:1px solid var(--border);padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));gap:10px;align-items:center;box-shadow:0 -8px 24px rgba(0,0,0,.1)}
   .buybar .bp{font-family:'Poppins',sans-serif;font-weight:800;font-size:1.05rem;white-space:nowrap}
+  .buybar .bp-old{font-family:'Inter',sans-serif;font-weight:500;font-size:.78rem;color:var(--muted);text-decoration:line-through;margin-right:6px}
+.buybar .bp-off{background:#16a34a;color:#fff;font-size:.65rem;font-weight:700;padding:2px 7px;border-radius:5px;margin-left:4px;text-transform:uppercase}
   .buybar .btn{flex:1;padding:12px 8px;font-size:.9rem}
   body{padding-bottom:78px}
   .toast{bottom:92px}
@@ -168,6 +172,7 @@ let cart=store.get('dhh_cart',{});
 
 const mapP=p=>({
   id:p.id,name:p.name||'Unnamed',cat:p.category||'Other',price:Number(p.price)||0,
+  old_price:Number(p.old_price)||0,
   img:p.image_url,desc:p.description||'',
   rating:Number(p.rating)||0,reviewsCount:p.reviews_count||0,
   requires_prescription:!!p.requires_prescription,
@@ -229,7 +234,11 @@ function render(){
           <span>${p.reviewsCount>0?p.rating.toFixed(1):'No ratings yet'}</span>
           <u>${p.reviewsCount} ${p.reviewsCount===1?'review':'reviews'}</u>
         </button>
-        <div class="price" id="priceTotal">${fmt(p.price)}</div>
+        <div class="price" id="priceTotal">
+  ${p.old_price ? `<span class="price-old">${fmt(p.old_price)}</span>` : ''}
+  <span id="currentPrice">${fmt(p.price)}</span>
+  ${p.old_price ? `<span class="price-off">${Math.round((1 - p.price/p.old_price) * 100)}% OFF</span>` : ''}
+</div>
         <div class="stock ${p.inStock?'':'out'}">${p.inStock?'In Stock':'Out of Stock'}</div>
         <p class="desc">${esc(p.desc)||'No description available.'}</p>
         ${rx}
@@ -281,18 +290,38 @@ function render(){
     </div>
   `;
   /* mobile sticky bar */
-  const old=document.querySelector('.buybar');if(old)old.remove();
   const bar=document.createElement('div');bar.className='buybar';
-  bar.innerHTML=`<span class="bp" id="barPrice">${fmt(p.price)}</span><button class="btn btn-outline" onclick="addToCart()" ${dis}>Add to Cart</button><button class="btn btn-primary" onclick="buyNow()" ${dis}>Buy Now</button>`;
-  document.body.appendChild(bar);
+const barPriceHtml = p.old_price
+  ? `<span class="bp" id="barPrice"><span class="bp-old">${fmt(p.old_price)}</span>${fmt(p.price)}<span class="bp-off">${Math.round((1 - p.price/p.old_price) * 100)}% OFF</span></span>`
+  : `<span class="bp" id="barPrice">${fmt(p.price)}</span>`;
+bar.innerHTML=`${barPriceHtml}<button class="btn btn-outline" onclick="addToCart()" ${dis}>Add to Cart</button><button class="btn btn-primary" onclick="buyNow()" ${dis}>Buy Now</button>`;
+document.body.appendChild(bar);
 }
 
 function qtyChange(d){
   qty=Math.max(1,Math.min(MAX_QTY,qty+d));
   $('qtyVal').textContent=qty;
   const t=fmt(current.price*qty);
-  $('priceTotal').textContent=qty>1?t:fmt(current.price);
-  const bp=$('barPrice');if(bp)bp.textContent=t;
+  
+  // Main price display update
+  const priceEl=$('priceTotal');
+  if(priceEl){
+    if(current.old_price && qty===1){
+      priceEl.innerHTML=`<span class="price-old">${fmt(current.old_price)}</span><span id="currentPrice">${fmt(current.price)}</span><span class="price-off">${Math.round((1 - current.price/current.old_price) * 100)}% OFF</span>`;
+    } else {
+      priceEl.innerHTML=`<span id="currentPrice">${t}</span>`;
+    }
+  }
+  
+  // Mobile buybar update
+  const bp=$('barPrice');
+  if(bp){
+    if(current.old_price && qty===1){
+      bp.innerHTML=`<span class="bp-old">${fmt(current.old_price)}</span>${fmt(current.price)}<span class="bp-off">${Math.round((1 - current.price/current.old_price) * 100)}% OFF</span>`;
+    } else {
+      bp.textContent=t;
+    }
+  }
 }
 function addToCart(){
   if(!current||!current.inStock)return;
