@@ -102,6 +102,8 @@
 .stars{color:var(--star);letter-spacing:1px}
 .price-row{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-top:2px}
 .price{font-size:1.22rem;font-weight:800;font-family:'Poppins',sans-serif}
+.price-old{text-decoration:line-through;color:var(--muted);font-size:.88rem;font-weight:500;margin-right:6px}
+.price-off{background:#16a34a;color:#fff;font-size:.68rem;font-weight:700;padding:3px 8px;border-radius:6px;text-transform:uppercase;letter-spacing:.3px;margin-left:6px;display:inline-block}
 .stock{color:var(--success);font-size:.76rem;font-weight:600;display:inline-flex;align-items:center;gap:5px}
 .stock::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
 .stock.out{color:var(--danger)}
@@ -800,7 +802,8 @@ function applyProducts(rows){
     id:p.id,name:p.name||'Unnamed',cat:p.category||'Other',price:Number(p.price)||0,icon:"💊",
     img:p.image_url,desc:p.description||"",
     rating:Number(p.rating)||0,reviewsCount:p.reviews_count||0,
-    requires_prescription:!!p.requires_prescription,
+old_price:Number(p.old_price)||0,
+requires_prescription:!!p.requires_prescription,
     inStock:p.in_stock!==false&&!(typeof p.stock==='number'&&p.stock<=0)
   }));
   /* include any extra categories that exist in the data */
@@ -867,7 +870,14 @@ function renderGrid(){
           <span class="stars" aria-hidden="true">${stars(p.rating)}</span>
           <span>${p.reviewsCount>0?p.rating.toFixed(1)+' ('+p.reviewsCount+')':'No reviews yet'}</span>
         </button>
-        <div class="price-row"><span class="price">${fmt(p.price)}</span><span class="stock ${p.inStock?'':'out'}">${p.inStock?'In stock':'Out of stock'}</span></div>
+        <div class="price-row">
+  <span class="price-wrap">
+    ${p.old_price ? `<span class="price-old">${fmt(p.old_price)}</span>` : ''}
+    <span class="price">${fmt(p.price)}</span>
+    ${p.old_price ? `<span class="price-off">${Math.round((1 - p.price/p.old_price) * 100)}% OFF</span>` : ''}
+  </span>
+  <span class="stock ${p.inStock?'':'out'}">${p.inStock?'In stock':'Out of stock'}</span>
+</div>
         <div class="card-actions">
           <button class="btn btn-outline" data-act="add" data-id="${esc(p.id)}" ${p.inStock?'':'disabled'}>Add to Cart</button>
           <button class="btn btn-primary" data-act="buy" data-id="${esc(p.id)}" ${p.inStock?'':'disabled'}>Buy Now</button>
