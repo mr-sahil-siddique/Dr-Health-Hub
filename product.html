@@ -302,22 +302,24 @@ function qtyChange(d){
   qty=Math.max(1,Math.min(MAX_QTY,qty+d));
   $('qtyVal').textContent=qty;
   const t=fmt(current.price*qty);
+  const oldT=current.old_price?fmt(current.old_price*qty):'';
+  const pct=current.old_price?Math.round((1 - current.price/current.old_price) * 100):0;
   
-  // Main price display update
+  // Main price display
   const priceEl=$('priceTotal');
   if(priceEl){
-    if(current.old_price && qty===1){
-      priceEl.innerHTML=`<span class="price-old">${fmt(current.old_price)}</span><span id="currentPrice">${fmt(current.price)}</span><span class="price-off">${Math.round((1 - current.price/current.old_price) * 100)}% OFF</span>`;
+    if(current.old_price){
+      priceEl.innerHTML=`<span class="price-old">${oldT}</span><span id="currentPrice">${t}</span><span class="price-off">${pct}% OFF</span>`;
     } else {
       priceEl.innerHTML=`<span id="currentPrice">${t}</span>`;
     }
   }
   
-  // Mobile buybar update
+  // Mobile buybar
   const bp=$('barPrice');
   if(bp){
-    if(current.old_price && qty===1){
-      bp.innerHTML=`<span class="bp-old">${fmt(current.old_price)}</span>${fmt(current.price)}<span class="bp-off">${Math.round((1 - current.price/current.old_price) * 100)}% OFF</span>`;
+    if(current.old_price){
+      bp.innerHTML=`<span class="bp-old">${oldT}</span>${t}<span class="bp-off">${pct}% OFF</span>`;
     } else {
       bp.textContent=t;
     }
