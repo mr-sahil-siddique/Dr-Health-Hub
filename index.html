@@ -18,6 +18,7 @@
 
 <link rel="icon" type="image/jpeg" href="image-logo.jpeg">
 <link rel="apple-touch-icon" href="image-logo.jpeg">
+<link rel="preload" as="image" href="image-logo.jpeg">
 
 <script>
 /* Apply saved / system theme BEFORE first paint (no white flash) */
@@ -65,7 +66,7 @@
 .section-head{text-align:center;margin-bottom:34px}
 .section-head h2{font-size:clamp(1.5rem,3vw,2rem);color:var(--primary)}
 .section-head p{color:var(--muted);margin-top:8px}
-.block{padding:64px 0}
+.block{padding:64px 0;content-visibility:auto;contain-intrinsic-size:auto 480px}
 
 /* ===== TOOLBAR (categories + sort) ===== */
 .products-head{display:flex;align-items:end;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:40px 0 14px}
@@ -278,7 +279,13 @@
 .notif-pop .np-close:hover{color:var(--danger)}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
 @media(max-width:480px){
-  .notif-pop{bottom:16px;left:10px;right:10px;width:auto}
+  .notif-pop{bottom:14px;left:10px;right:78px;width:auto;padding:8px 10px;gap:9px;border-radius:12px}
+  .notif-pop .np-icon{width:34px;height:34px;border-radius:9px;font-size:1.1rem}
+  .notif-pop .np-icon .np-badge{display:none}
+  .notif-pop .np-head{font-size:.6rem;margin-bottom:2px}
+  .notif-pop .np-title{font-size:.78rem}
+  .notif-pop .np-msg{font-size:.72rem;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+  .notif-pop .np-time{display:none}
 }
 /* ===== REVEAL ===== */
 .reveal{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s ease;transition-delay:var(--d,0s)}
@@ -290,7 +297,7 @@
 <a class="skip-link" href="#products">Skip to medicines</a>
 
 <div class="topbar">
-  <span>🚚 Free delivery on orders above Rs. 2000</span>
+  <span>🚚 Free delivery all over Pakistan · Glutathione: flat Rs. 250</span>
   <span>📞 24/7 Support: <a href="tel:+923290592005">0329-0592005</a></span>
 </div>
 
@@ -306,7 +313,7 @@
   </form>
   <div class="header-actions">
     <div id="authArea"></div>
-    <button class="icon-btn" id="themeBtn" aria-label="Switch dark / light mode" title="Dark / light mode">🌙</button>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch to dark mode"><span id="themeIco" aria-hidden="true">🌙</span><span class="theme-lbl" id="themeLbl">Dark</span></button>
     <button class="cart-btn" id="cartBtn" aria-label="Open cart"><span aria-hidden="true">🛒</span><span class="cart-label">Cart</span><span class="badge" id="cartCount" aria-live="polite">0</span></button>
   </div>
 </header>
@@ -411,7 +418,7 @@
       <div class="faq reveal">
         <details><summary>Do I need a prescription?</summary><p>Medicines marked "Rx Required" need a valid prescription from a registered doctor. After ordering, send a photo of the prescription on WhatsApp so we can verify it before dispatch.</p></details>
         <details><summary>How long does delivery take?</summary><p>We aim for same-day or within 24 hours in major cities. Other areas usually take 2–3 business days. Orders placed after 6 PM are processed the next day.</p></details>
-        <details><summary>Is delivery free?</summary><p>Delivery is free on orders above Rs. 2000. Below that, delivery charges of Rs. 100–200 may apply depending on your area, confirmed on WhatsApp.</p></details>
+        <details><summary>Is delivery free?</summary><p>Yes — delivery is free all over Pakistan on all our products, except Glutathione. Glutathione orders have a flat delivery charge of Rs. 250 (once per order).</p></details>
         <details><summary>Which payment methods do you accept?</summary><p>Cash on Delivery, JazzCash and EasyPaisa. For JazzCash / EasyPaisa, send the payment screenshot on WhatsApp to confirm your order.</p></details>
         <details><summary>Can I return a medicine?</summary><p>Unopened, unused products in original packaging can be returned within 7 days of delivery. Please read our Return &amp; Refund policy for exceptions.</p></details>
       </div>
@@ -478,7 +485,9 @@
   <div class="drawer-body" id="cartItems"></div>
   <div class="drawer-foot">
     <div id="shipBar"></div>
-    <div class="row" style="margin-top:12px"><span>Subtotal</span><span id="subtotal">Rs. 0</span></div>
+    <div class="row" style="margin:12px 0 6px;font-weight:500"><span>Subtotal</span><span id="subtotal">Rs. 0</span></div>
+    <div class="row" style="margin:0 0 6px;font-weight:500"><span>Delivery</span><span id="delVal">Free</span></div>
+    <div class="row"><span>Total</span><span id="cartGrand">Rs. 0</span></div>
     <button class="btn btn-primary btn-block" style="padding:14px" onclick="startCartCheckout()">Proceed to Checkout</button>
   </div>
 </aside>
@@ -492,6 +501,7 @@
 <!-- Checkout -->
 <div class="modal" id="checkoutModal" role="dialog" aria-modal="true" aria-labelledby="coTitle" tabindex="-1">
   <h3 id="coTitle">Checkout</h3>
+  <p class="co-note" style="margin:2px 0 0">✅ No account needed — just fill in your details.</p>
   <div class="co-summary" id="coItems"></div>
   <form id="checkoutForm" novalidate>
     <div class="field"><label for="cName">Full Name</label><input id="cName" required autocomplete="name" minlength="3"></div>
@@ -618,10 +628,10 @@
   </form>
 </div>
 <!-- ===== NOTIFICATION (bottom-left) ===== -->
-<div class="notif-pop" id="notifPop" onclick="clickNotif()" role="alert">
+<div class="notif-pop" id="notifPop" onclick="clickNotif()" role="status" aria-live="polite">
   <div class="np-icon" id="npIcon">💊</div>
   <div class="np-body">
-    <div class="np-head"><span class="np-dot"></span>Recent Order</div>
+    <div class="np-head"><span class="np-dot"></span><span id="npHead">Offer</span></div>
     <div class="np-title" id="npTitle"></div>
     <div class="np-msg" id="npMsg"></div>
     <span class="np-time" id="npTime"></span>
@@ -629,7 +639,7 @@
   <button class="np-close" onclick="event.stopPropagation();hideNotif()" aria-label="Close">✕</button>
 </div>
 <div class="wa-float" id="waFloat">
-  <div class="wa-tip" id="waTip"><span>Need help? Chat on WhatsApp</span><button onclick="dismissWaTip()" aria-label="Dismiss">✕</button></div>
+  <div class="wa-tip" id="waTip" hidden><span>Need help? Chat on WhatsApp</span><button onclick="dismissWaTip()" aria-label="Dismiss">✕</button></div>
   <button class="wa-circle" onclick="openWhatsAppSupport()" aria-label="Chat on WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></button>
 </div>
 
@@ -643,7 +653,8 @@ const SUPABASE_URL="https://fnyyhvqsmzcworwuhssq.supabase.co";
 const SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZueXlodnFzbXpjd29yd3Voc3NxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAzMjk4ODAsImV4cCI6MjEwNTkwNTg4MH0.QAJ-wDBIa9BFPD5BBEOVyTlW6EHOPk9P_cmX5FqsPvE";
 const WHATSAPP_NUMBER="923290592005";
 const PAY_NUMBER="0329-0592005";
-const FREE_DELIVERY=2000;
+const DELIVERY_FEE=250;              /* flat delivery charge (all Pakistan), charged ONCE per order */
+const FEE_ITEM=/glu\w{0,3}thion/i;  /* products whose NAME matches this (Glutathione) carry the fee; every other product ships free */
 const MAX_QTY=10;
 /* Put your pharmacy / drug-sale licence number here — it will show in the footer.
    Example: "DRAP / Punjab Drug License No. XXXXX". Leave empty to hide. */
@@ -684,13 +695,18 @@ let lastFocus=null;
 let io=null;
 
 const byId=id=>PRODUCTS.find(p=>String(p.id)===String(id));
+const itemFee=p=>FEE_ITEM.test((p&&p.name)||'')?DELIVERY_FEE:0;
+const cartFee=()=>Math.max(0,...Object.keys(cart).map(id=>{const p=byId(id);return p?itemFee(p):0;}));
+const feeOfItems=items=>Math.max(0,...items.map(i=>i.fee||0));
 
 /* =====================================================================
    THEME
    ===================================================================== */
 function syncThemeUI(){
   const dark=document.documentElement.dataset.theme==='dark';
-  $('themeBtn').textContent=dark?'☀️':'🌙';
+  $('themeIco').textContent=dark?'☀️':'🌙';
+  $('themeLbl').textContent=dark?'Light':'Dark';
+  $('themeBtn').setAttribute('aria-label',dark?'Switch to light mode':'Switch to dark mode');
   const m=document.querySelector('meta[name="theme-color"]');if(m)m.content=dark?'#0a4a51':'#0e7c86';
 }
 function toggleTheme(){
@@ -766,7 +782,7 @@ const LEGAL_CONTENT={
     <p class="updated">Last updated: October 2026</p>`},
   shipping:{title:'🚚 Shipping Policy',body:`<p>We are committed to delivering your medicines safely and on time.</p>
     <h4>Delivery Time</h4><ul><li><strong>Faisalabad:</strong> Same day or within 24 hours</li><li><strong>Other cities:</strong> 2-3 business days</li><li>Orders placed after 6 PM will be processed next day</li></ul>
-    <h4>Delivery Charges</h4><ul><li><strong>Free delivery</strong> on orders above Rs. 2000</li><li>Orders below Rs. 2000: Delivery charges apply (Rs. 100-200 based on area)</li></ul>
+    <h4>Delivery Charges</h4><ul><li><strong>Free delivery</strong> all over Pakistan on all products</li><li><strong>Glutathione products:</strong> flat delivery charge of Rs. 250 per order (all Pakistan)</li></ul>
     <h4>Delivery Areas</h4><p>We currently deliver across Pakistan. Remote areas may have extended delivery times.</p>
     <h4>Delivery Process</h4><ul><li>Orders are dispatched after payment confirmation</li><li>You will receive a WhatsApp confirmation before dispatch</li><li>Delivery personnel will call before arriving</li></ul>
     <h4>Failed Delivery</h4><p>If no one is available at the delivery address, the order will be rescheduled. Repeated failed deliveries may result in order cancellation.</p>
@@ -802,7 +818,7 @@ function applyProducts(rows){
     id:p.id,name:p.name||'Unnamed',cat:p.category||'Other',price:Number(p.price)||0,icon:"💊",
     img:p.image_url,desc:p.description||"",
     rating:Number(p.rating)||0,reviewsCount:p.reviews_count||0,
-old_price:Number(p.old_price)||0,
+old_price:(Number(p.old_price)>Number(p.price)?Number(p.old_price):0),
 requires_prescription:!!p.requires_prescription,
     inStock:p.in_stock!==false&&!(typeof p.stock==='number'&&p.stock<=0)
   }));
@@ -861,7 +877,7 @@ function renderGrid(){
   $('grid').innerHTML=items.map((p,i)=>{
     const url='product.html?id='+encodeURIComponent(p.id);
     return `<article class="card reveal" style="--d:${Math.min(i%8,7)*.04}s" data-pid="${esc(p.id)}">
-      <a class="card-media" href="${url}" aria-label="View ${esc(p.name)}" tabindex="-1">${p.img?`<img src="${esc(p.img)}" alt="${esc(p.name)}" width="320" height="240" loading="lazy" onerror="this.remove()">`:''}<span class="emoji" aria-hidden="true" style="${p.img?'z-index:-1':''}">${p.icon}</span></a>
+      <a class="card-media" href="${url}" aria-label="View ${esc(p.name)}" tabindex="-1">${p.img?`<img src="${esc(p.img)}" alt="${esc(p.name)}" width="320" height="240" loading="${i<4?'eager':'lazy'}" decoding="async" onerror="this.remove()">`:''}<span class="emoji" aria-hidden="true" style="${p.img?'z-index:-1':''}">${p.icon}</span></a>
       <div class="card-body">
         <div class="tag-row"><span class="tag">${esc(p.cat)}</span>${p.requires_prescription?'<span class="rx-badge">⚠️ Rx required</span>':''}</div>
         <h3><a href="${url}">${esc(p.name)}</a></h3>
@@ -927,13 +943,8 @@ $('reviewForm').addEventListener('submit',async e=>{
   const btn=e.submitter||e.target.querySelector('[type=submit]');btn.disabled=true;
   const {error}=await supa.from('reviews').insert({product_id:reviewingProductId,user_id:session.user.id,user_name:userName,rating,comment});
   btn.disabled=false;
-  if(error){toast('Review failed: '+error.message);return;}
-  /* NOTE: ideally this average is computed by a database trigger (see notes) */
-  const {data:all}=await supa.from('reviews').select('rating').eq('product_id',reviewingProductId);
-  if(all&&all.length){
-    const avg=all.reduce((s,r)=>s+r.rating,0)/all.length;
-    await supa.from('products').update({rating:parseFloat(avg.toFixed(1)),reviews_count:all.length}).eq('id',reviewingProductId);
-  }
+  if(error){toast(error.code==='23505'?'You have already reviewed this product.':'Review failed: '+error.message);return;}
+  /* average rating + review count are updated by the database (see supabase-setup.sql) */
   toast('Review submitted! Thank you ⭐');
   closeAll();e.target.reset();
   loadProducts();
@@ -984,13 +995,14 @@ function renderCart(){
       return `<div class="cart-line"><div class="thumb">${p.img?`<img src="${esc(p.img)}" alt="" loading="lazy">`:p.icon}</div><div class="info"><h5>${esc(p.name)}</h5><span class="unit">${fmt(p.price)} each</span><div class="qty"><button data-act="dec" data-id="${esc(p.id)}" aria-label="Decrease quantity">−</button><span aria-live="polite">${cart[id]}</span><button data-act="inc" data-id="${esc(p.id)}" aria-label="Increase quantity">+</button><button class="remove" data-act="rm" data-id="${esc(p.id)}" aria-label="Remove ${esc(p.name)}">🗑️</button></div></div><div class="line-total">${fmt(p.price*cart[id])}</div></div>`;
     }).join('');
   }
-  const total=cartTotal();
+  const total=cartTotal(), fee=cartFee();
   $('subtotal').textContent=fmt(total);
+  $('delVal').textContent=fee?fmt(fee):'Free';
+  $('cartGrand').textContent=fmt(total+fee);
   if(!ids.length){$('shipBar').innerHTML='';return;}
-  const left=FREE_DELIVERY-total;
-  $('shipBar').innerHTML=left>0
-    ?`<div class="ship-bar">🚚 Add <strong>${fmt(left)}</strong> more for <strong>free delivery</strong><div class="track"><div class="fill" style="width:${Math.min(100,total/FREE_DELIVERY*100)}%"></div></div></div>`
-    :`<div class="ship-bar">🎉 You've got <strong>free delivery</strong>!<div class="track"><div class="fill" style="width:100%"></div></div></div>`;
+  $('shipBar').innerHTML=fee
+    ?`<div class="ship-bar">🚚 Glutathione orders have a flat <strong>${fmt(fee)}</strong> delivery charge (all Pakistan). Every other product ships <strong>free</strong>.</div>`
+    :`<div class="ship-bar">🎉 You've got <strong>free delivery</strong> on this order!</div>`;
 }
 function openCart(){renderCart();openLayer('drawer');}
 $('cartItems').addEventListener('click',e=>{
@@ -1008,7 +1020,7 @@ function checkoutItems(){
   const src=buyNowItem?{[buyNowItem.id]:buyNowItem.qty}:cart;
   return Object.entries(src).map(([id,qty])=>{
     const p=byId(id);
-    return p?{id:p.id,name:p.name,qty:Number(qty),price:p.price,rx:p.requires_prescription}:null;
+    return p?{id:p.id,name:p.name,qty:Number(qty),price:p.price,rx:p.requires_prescription,fee:itemFee(p)}:null;
   }).filter(Boolean);
 }
 function buyNow(id,qty=1){
@@ -1020,18 +1032,14 @@ function startCartCheckout(){buyNowItem=null;openCheckout();}
 function openCheckout(){
   const items=checkoutItems();
   if(!items.length){toast('Your cart is empty');return;}
-  if(!session){
-    pending=buyNowItem?{type:'buy',id:buyNowItem.id,qty:buyNowItem.qty}:{type:'cart'};
-    toast('Please login to place an order');openAuth();return;
-  }
   const saved=store.get('dhh_customer',{});
-  if(!$('cName').value)$('cName').value=saved.name||session.user.user_metadata?.full_name||'';
+  if(!$('cName').value)$('cName').value=saved.name||session?.user?.user_metadata?.full_name||'';
   if(!$('cPhone').value)$('cPhone').value=saved.phone||'';
   if(!$('cAddr').value)$('cAddr').value=saved.address||'';
-  $('coItems').innerHTML=items.map(i=>`<div class="co-line"><span>${esc(i.name)} <em>× ${i.qty}</em></span><b>${fmt(i.price*i.qty)}</b></div>`).join('');
+  $('coItems').innerHTML=items.map(i=>`<div class="co-line"><span>${esc(i.name)} <em>× ${i.qty}</em></span><b>${fmt(i.price*i.qty)}</b></div>`).join('')+`<div class="co-line"><span>Delivery</span><b>${feeOfItems(items)?fmt(feeOfItems(items)):'Free'}</b></div>`;
   const total=items.reduce((s,i)=>s+i.price*i.qty,0);
-  $('checkoutTotal').textContent=fmt(total);
-  $('coDelivery').textContent=total>=FREE_DELIVERY?'🎉 Free delivery on this order.':'Delivery charges (Rs. 100–200 depending on area) may apply and will be confirmed on WhatsApp.';
+  $('checkoutTotal').textContent=fmt(total+feeOfItems(items));
+  $('coDelivery').textContent=feeOfItems(items)?'🚚 Flat delivery charge of '+fmt(feeOfItems(items))+' applies to Glutathione orders (all Pakistan).':'🎉 Free delivery on this order.';
   const hasRx=items.some(i=>i.rx);
   $('rxConfirmWrap').hidden=!hasRx;$('rxConfirm').required=hasRx;$('rxConfirm').checked=false;
   const keepBuy=buyNowItem,keepPending=pending;
@@ -1050,7 +1058,7 @@ $('checkoutForm').addEventListener('submit',async e=>{
   e.preventDefault();
   const form=e.target;
   if(!form.checkValidity()){form.reportValidity();return;}
-  if(!session){toast('Session expired. Please login again.');openAuth();return;}
+  try{if(Date.now()-Number(localStorage.getItem('dhh_last_order')||0)<30000){toast('Please wait a few seconds before placing another order');return;}}catch(e){}
   const items=checkoutItems();
   if(!items.length){toast('Your cart is empty');return;}
   const btn=$('placeBtn');btn.disabled=true;btn.textContent='Placing order…';
@@ -1058,14 +1066,18 @@ $('checkoutForm').addEventListener('submit',async e=>{
   const orderId='DHH-'+Date.now().toString(36).slice(-4).toUpperCase()+Math.floor(100+Math.random()*900);
   const total=items.reduce((s,i)=>s+i.price*i.qty,0);
   const name=$('cName').value.trim(),phone=$('cPhone').value.trim(),address=$('cAddr').value.trim();
-  const {error}=await supa.from('orders').insert({order_code:orderId,user_id:session.user.id,customer_name:name,phone,address,items:items.map(i=>({id:i.id,name:i.name,qty:i.qty,price:i.price})),total,payment_method:paymentMethod});
+  const fee=feeOfItems(items),grand=total+fee;
+  const rows=items.map(i=>({id:i.id,name:i.name,qty:i.qty,price:i.price}));
+  if(fee)rows.push({id:'delivery',name:'Delivery charges',qty:1,price:fee});
+  const {error}=await supa.from('orders').insert({order_code:orderId,user_id:session?session.user.id:null,customer_name:name,phone,address,items:rows,total:grand,payment_method:paymentMethod});
   btn.disabled=false;btn.textContent='Place Order';
-  if(error){toast('Order failed: '+error.message);return;}
+  if(error){toast('Order could not be placed. Please try again or order on WhatsApp. ('+error.message+')');return;}
   store.set('dhh_customer',{name,phone,address});
-  lastOrderData={orderId,name,phone,address,items,total,payment:paymentMethod,rx:items.some(i=>i.rx)};
+  try{localStorage.setItem('dhh_last_order',String(Date.now()))}catch(e){}
+  lastOrderData={orderId,name,phone,address,items,total:grand,fee,payment:paymentMethod,rx:items.some(i=>i.rx)};
   if(!buyNowItem){cart={};saveCart();updateBadge();}   /* only clear cart if it was a cart checkout */
   buyNowItem=null;pending=null;
-  $('confirmText').innerHTML=`Order <strong>${esc(orderId)}</strong> for <strong>${fmt(total)}</strong><br>Expected delivery: within 24 hours.`;
+  $('confirmText').innerHTML=`Order <strong>${esc(orderId)}</strong> for <strong>${fmt(grand)}</strong><br>Expected delivery: within 24 hours.<br><small>Please save your Order ID — quote it on WhatsApp for any update.</small>`;
   $('payReminderBox').hidden=paymentMethod==='COD';
   openLayer('confirmModal');
   form.reset();updatePayUI('COD');
@@ -1076,9 +1088,9 @@ $('checkoutForm').addEventListener('submit',async e=>{
    ===================================================================== */
 function sendWhatsApp(){
   if(!lastOrderData){toast('Order information missing');return;}
-  const {orderId,name,phone,address,items,total,payment,rx}=lastOrderData;
+  const {orderId,name,phone,address,items,total,payment,rx,fee}=lastOrderData;
   const itemsText=items.map(i=>`• ${i.name} x${i.qty} = Rs. ${i.price*i.qty}`).join('\n');
-  const msg=`🏥 *Dr Health Hub — New Order*\n\n📦 *Order ID:* ${orderId}\n👤 *Name:* ${name}\n📞 *Phone:* ${phone}\n📍 *Address:* ${address}\n\n🛒 *Items:*\n${itemsText}\n\n💰 *Total:* Rs. ${total}\n💳 *Payment:* ${payment}\n\n${payment!=='COD'?'✅ I am sending the payment screenshot.':'💵 Cash on Delivery'}${rx?'\n📄 I am sending my prescription in this chat.':''}`;
+  const msg=`🏥 *Dr Health Hub — New Order*\n\n📦 *Order ID:* ${orderId}\n👤 *Name:* ${name}\n📞 *Phone:* ${phone}\n📍 *Address:* ${address}\n\n🛒 *Items:*\n${itemsText}\n\n🚚 *Delivery:* ${fee?'Rs. '+fee:'Free'}\n💰 *Total:* Rs. ${total}\n💳 *Payment:* ${payment}\n\n${payment!=='COD'?'✅ I am sending the payment screenshot.':'💵 Cash on Delivery'}${rx?'\n📄 I am sending my prescription in this chat.':''}`;
   window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`,'_blank','noopener');
 }
 function openWhatsAppSupport(){
@@ -1089,7 +1101,7 @@ function openWhatsAppRx(){
   const msg=`Assalam o Alaikum Dr Health Hub! 🌟\n\nI want to order medicines with a prescription. I am sending the prescription photo here.`;
   window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`,'_blank','noopener');
 }
-function dismissWaTip(){$('waTip').style.display='none';try{sessionStorage.setItem('dhh_wa_tip','1')}catch(e){}}
+function dismissWaTip(){$('waTip').hidden=true;try{localStorage.setItem('dhh_wa_tip','1')}catch(e){}}
 
 /* =====================================================================
    AUTH
@@ -1232,53 +1244,61 @@ async function submitAdminPin(){
   openLayer('adminDrawer');
 }
 /* =====================================================================
-   NOTIFICATION (bottom-left, recent orders)
+   NOTIFICATION (bottom-left: offers, real products, support)
    ===================================================================== */
-const FAKE_ORDERS=[
-  {name:"Ahmed Raza", city:"Lahore", time:"just now"},
-  {name:"Fatima Khan", city:"Karachi", time:"1 minute ago"},
-  {name:"Bilal Hussain", city:"Islamabad", time:"2 minutes ago"},
-  {name:"Ayesha Malik", city:"Rawalpindi", time:"3 minutes ago"},
-  {name:"Usman Tariq", city:"Multan", time:"4 minutes ago"},
-  {name:"Sana Iqbal", city:"Faisalabad", time:"5 minutes ago"},
-  {name:"Hassan Ali", city:"Peshawar", time:"6 minutes ago"},
-  {name:"Maryam Noor", city:"Quetta", time:"7 minutes ago"}
-];
-let fakeOrderIndex=0;
-let notifTimer=null;
-let currentNotifProdId=null;
+let notifIdx=0, notifTimer=null, notifAction=null;
 
+function focusCard(id){
+  const card=document.querySelector(`.card[data-pid="${id}"]`);
+  if(!card)return;
+  card.scrollIntoView({behavior:'smooth',block:'center'});
+  card.classList.add('highlight');
+  setTimeout(()=>card.classList.remove('highlight'),2200);
+}
+/* Only TRUE information is shown: real products from the store (discounted ones first), delivery policy, support. */
+function buildNotifs(){
+  const inStock=PRODUCTS.filter(p=>p.inStock);
+  const deals=inStock.filter(p=>p.old_price>p.price);
+  const prods=(deals.length?deals:inStock).slice(0,6).map(p=>{
+    const off=p.old_price>p.price?Math.round((1-p.price/p.old_price)*100):0;
+    return {head:off?'Special offer':'Popular',icon:p.img,badge:fmt(p.price).replace('Rs. ',''),
+      title:`<strong>${esc(p.name)}</strong>`,
+      msg:off?`${off}% off — now ${fmt(p.price)}`:`${esc(p.cat)} · ${fmt(p.price)}`,
+      time:'Tap to view',act:()=>focusCard(p.id)};
+  });
+  const infos=[
+    {head:'Delivery',emoji:'🚚',title:'<strong>Free delivery</strong> all over Pakistan',msg:'On all products (Glutathione: flat Rs. 250)',time:'Cash on delivery available',act:()=>document.getElementById('products').scrollIntoView({behavior:'smooth'})},
+    {head:'Prescription?',emoji:'📄',title:'<strong>Have a prescription?</strong>',msg:'Send a photo on WhatsApp — we do the rest',time:'Tap to chat',act:openWhatsAppRx},
+    {head:'Support 24/7',emoji:'💬',title:'<strong>Need help choosing?</strong>',msg:'Chat with our team on WhatsApp',time:'Tap to chat',act:openWhatsAppSupport}
+  ];
+  const out=[],n=Math.max(prods.length,infos.length);
+  for(let i=0;i<n;i++){if(prods[i])out.push(prods[i]);if(infos[i])out.push(infos[i]);}
+  return out;
+}
 function showNotif(){
   if(!PRODUCTS.length)return;
-  const cust=FAKE_ORDERS[fakeOrderIndex%FAKE_ORDERS.length];fakeOrderIndex++;
-  const prod=PRODUCTS[Math.floor(Math.random()*PRODUCTS.length)];
-  currentNotifProdId=prod.id;
-  const pop=$('notifPop');
-  if(!pop)return;
-  $('npIcon').innerHTML=(prod.img?`<img src="${esc(prod.img)}" alt="${esc(prod.name)}" loading="lazy">`:'💊')+`<span class="np-badge">${fmt(prod.price).replace('Rs. ','')}</span>`;
-  $('npTitle').innerHTML=`<strong>${esc(cust.name)}</strong> from ${esc(cust.city)}`;
-  $('npMsg').innerHTML=`just ordered <strong>${esc(prod.name)}</strong>`;
-  $('npTime').textContent=cust.time;
+  const pop=$('notifPop');if(!pop)return;
+  const list=buildNotifs();if(!list.length)return;
+  const n=list[notifIdx%list.length];notifIdx++;
+  notifAction=n.act;
+  $('npHead').textContent=n.head;
+  $('npIcon').innerHTML=(n.icon?`<img src="${esc(n.icon)}" alt="" loading="lazy">`:(n.emoji||'💊'))+(n.badge?`<span class="np-badge">${esc(n.badge)}</span>`:'');
+  $('npTitle').innerHTML=n.title;
+  $('npMsg').innerHTML=n.msg;
+  $('npTime').textContent=n.time||'';
   pop.classList.add('show');
   clearTimeout(notifTimer);
   notifTimer=setTimeout(hideNotif,7000);
 }
 function hideNotif(){const p=$('notifPop');if(p)p.classList.remove('show');}
-function clickNotif(){
-  if(!currentNotifProdId){hideNotif();return;}
-  const card=document.querySelector(`.card[data-pid="${currentNotifProdId}"]`);
-  if(card){
-    card.scrollIntoView({behavior:'smooth',block:'center'});
-    card.classList.add('highlight');
-    setTimeout(()=>card.classList.remove('highlight'),2200);
-  }
-  hideNotif();
-}
+function clickNotif(){const a=notifAction;hideNotif();if(a)a();}
 function startNotifs(){
   setTimeout(()=>{
     showNotif();
     setInterval(()=>{
-      if(!$('notifPop').classList.contains('show'))showNotif();
+      if($('notifPop').classList.contains('show'))return;
+      if(LAYERS.some(l=>$(l).classList.contains('show')))return;   /* never pop up over checkout, cart, login... */
+      showNotif();
     },15000);
   },5000);
 }
@@ -1293,7 +1313,17 @@ document.addEventListener('DOMContentLoaded',async()=>{
   if('ResizeObserver' in window)new ResizeObserver(setHeaderHeight).observe($('siteHeader'));
 
   if(LICENSE_NO){$('licenseLine').textContent='🏥 '+LICENSE_NO;$('licenseLine').hidden=false;}
-  try{if(sessionStorage.getItem('dhh_wa_tip')||window.innerWidth<480)$('waTip').style.display='none';else setTimeout(()=>{$('waTip').style.display='none'},12000);}catch(e){}
+  /* WhatsApp tip: shown ONCE per visitor, after 25s, on bigger screens only; hides itself after 8s */
+  try{
+    if(!localStorage.getItem('dhh_wa_tip')&&window.innerWidth>=480){
+      setTimeout(()=>{
+        if(LAYERS.some(l=>$(l).classList.contains('show')))return;
+        $('waTip').hidden=false;
+        try{localStorage.setItem('dhh_wa_tip','1')}catch(e){}
+        setTimeout(()=>{$('waTip').hidden=true},8000);
+      },25000);
+    }
+  }catch(e){}
 
   $('themeBtn').addEventListener('click',toggleTheme);
   $('menuBtn').addEventListener('click',()=>openLayer('sideMenu'));
