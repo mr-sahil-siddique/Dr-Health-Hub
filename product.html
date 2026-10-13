@@ -11,7 +11,7 @@
 <link rel="apple-touch-icon" href="image-logo.jpeg">
 
 <script>
-(function(){try{var t=localStorage.getItem('dhh_theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();
+(function(){try{var t=localStorage.getItem('dhh_theme');if(t!=='dark')t='light';document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();
 </script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -104,21 +104,21 @@
 <a class="skip-link" href="#content">Skip to product</a>
 
 <div class="topbar">
-  <span>🚚 Free delivery on orders above Rs. 2000</span>
+  <span>🚚 Free delivery all over Pakistan · Glutathione: flat Rs. 250</span>
   <span>📞 24/7 Support: <a href="tel:+923290592005">0329-0592005</a></span>
 </div>
 
 <header class="main" id="siteHeader">
   <a href="index.html" class="brand" aria-label="Dr Health Hub home">
     <img src="image-logo.jpeg" alt="" width="46" height="46">
-    <div><h1>Dr Health Hub</h1><p>Faisalabad's 24/7 Online Pharmacy</p></div>
+    <div><h1>Dr Health Hub</h1><p>Online Pharmacy 24/7</p></div>
   </a>
   <form class="search-wrap" role="search" id="searchForm">
     <span class="s-ico" aria-hidden="true">🔍</span>
     <input id="search" type="search" placeholder="Search medicines…" aria-label="Search medicines" autocomplete="off">
   </form>
   <div class="header-actions">
-    <button class="icon-btn" id="themeBtn" aria-label="Switch dark / light mode" title="Dark / light mode">🌙</button>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch to dark mode"><span id="themeIco" aria-hidden="true">🌙</span><span class="theme-lbl" id="themeLbl">Dark</span></button>
     <a class="cart-btn" href="index.html?cart=1" aria-label="Open cart"><span aria-hidden="true">🛒</span><span class="cart-label">Cart</span><span class="badge" id="cartCount">0</span></a>
   </div>
 </header>
@@ -144,8 +144,8 @@
 <footer class="site">
   <div class="footer-bottom" style="border:none;padding-top:0">
     <p style="font-weight:700;color:#fff;font-size:1rem">Dr Health Hub</p>
-    <p style="margin:6px 0">Faisalabad's 24/7 Online Pharmacy</p>
-    <p>📍 Faisalabad, Punjab · 📞 <a href="tel:+923290592005">0329-0592005</a> · ✉️ <a href="mailto:support@drhealthhub.pk">support@drhealthhub.pk</a></p>
+    <p style="margin:6px 0">Online Pharmacy 24/7</p>
+    <p>📍 Punjab, Pakistan · 📞 <a href="tel:+923290592005">0329-0592005</a> · ✉️ <a href="mailto:support@drhealthhub.pk">support@drhealthhub.pk</a></p>
     <p class="disclaimer" style="margin-top:14px">⚠️ <strong>Medical Disclaimer:</strong> This website provides general information only and does not replace professional medical advice. Always consult a qualified doctor or pharmacist before using any medicine.</p>
     <p>© 2026 Dr Health Hub. All rights reserved. · <a href="index.html" style="text-decoration:underline">Back to store</a></p>
   </div>
@@ -158,6 +158,8 @@ const SUPABASE_URL="https://fnyyhvqsmzcworwuhssq.supabase.co";
 const SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZueXlodnFzbXpjd29yd3Voc3NxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAzMjk4ODAsImV4cCI6MjEwNTkwNTg4MH0.QAJ-wDBIa9BFPD5BBEOVyTlW6EHOPk9P_cmX5FqsPvE";
 const WHATSAPP_NUMBER="923290592005";
 const MAX_QTY=10;
+const DELIVERY_FEE=250;              /* flat delivery (all Pakistan) for Glutathione products only */
+const FEE_ITEM=/glu\w{0,3}thion/i;
 
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -172,7 +174,7 @@ let cart=store.get('dhh_cart',{});
 
 const mapP=p=>({
   id:p.id,name:p.name||'Unnamed',cat:p.category||'Other',price:Number(p.price)||0,
-  old_price:Number(p.old_price)||0,
+  old_price:(Number(p.old_price)>Number(p.price)?Number(p.old_price):0),
   img:p.image_url,desc:p.description||'',
   rating:Number(p.rating)||0,reviewsCount:p.reviews_count||0,
   requires_prescription:!!p.requires_prescription,
@@ -180,7 +182,7 @@ const mapP=p=>({
 });
 
 /* theme */
-function syncThemeUI(){const d=document.documentElement.dataset.theme==='dark';$('themeBtn').textContent=d?'☀️':'🌙';const m=document.querySelector('meta[name="theme-color"]');if(m)m.content=d?'#0a4a51':'#0e7c86';}
+function syncThemeUI(){const d=document.documentElement.dataset.theme==='dark';$('themeIco').textContent=d?'☀️':'🌙';$('themeLbl').textContent=d?'Light':'Dark';$('themeBtn').setAttribute('aria-label',d?'Switch to light mode':'Switch to dark mode');const m=document.querySelector('meta[name="theme-color"]');if(m)m.content=d?'#0a4a51':'#0e7c86';}
 function toggleTheme(){const n=document.documentElement.dataset.theme==='dark'?'light':'dark';document.documentElement.dataset.theme=n;try{localStorage.setItem('dhh_theme',n)}catch(e){}syncThemeUI();}
 function updateBadge(){$('cartCount').textContent=Object.values(cart).reduce((a,b)=>a+b,0);}
 
@@ -255,7 +257,7 @@ function render(){
           <button class="btn btn-primary" onclick="buyNow()" ${dis}>Buy Now</button>
         </div>
         <div class="assure">
-          <div>✅ Genuine medicine</div><div>🚚 Fast delivery</div><div>💵 Cash on delivery</div>
+          <div>✅ Genuine medicine</div><div>🚚 ${FEE_ITEM.test(p.name)?'Delivery: Rs. '+DELIVERY_FEE:'Free delivery'}</div><div>💵 Cash on delivery</div>
         </div>
         <div class="link-row">
           <button class="btn btn-wa" onclick="askWhatsApp()">💬 Ask about this medicine</button>
