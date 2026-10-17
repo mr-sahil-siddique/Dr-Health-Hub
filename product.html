@@ -4,9 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Product — Dr Health Hub</title>
-<meta name="description" content="Buy genuine medicines online from Dr Health Hub, Faisalabad's 24/7 online pharmacy.">
+<meta name="description" content="Buy genuine medicines online from Dr Health Hub, Pakistan's 24/7 online pharmacy.">
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#0e7c86">
+<link rel="canonical" id="canon" href="https://drhealthhub.store/">
+<meta property="og:site_name" content="Dr Health Hub">
+<meta property="og:type" content="product">
+<meta property="og:locale" content="en_PK">
+<meta property="og:title" id="ogTitle" content="Product — Dr Health Hub">
+<meta property="og:description" id="ogDesc" content="Buy genuine medicines online from Dr Health Hub, Pakistan's 24/7 online pharmacy.">
+<meta property="og:url" id="ogUrl" content="https://drhealthhub.store/">
+<meta property="og:image" id="ogImg" content="https://drhealthhub.store/image-logo.jpeg">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/jpeg" href="image-logo.jpeg">
 <link rel="apple-touch-icon" href="image-logo.jpeg">
 
@@ -17,8 +26,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://fnyyhvqsmzcworwuhssq.supabase.co" crossorigin>
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="theme.css">
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 
@@ -188,6 +196,7 @@ function toggleTheme(){const n=document.documentElement.dataset.theme==='dark'?'
 function updateBadge(){$('cartCount').textContent=Object.values(cart).reduce((a,b)=>a+b,0);}
 
 function showError(icon,msg,retry){
+  const nr=document.createElement('meta');nr.name='robots';nr.content='noindex';document.head.appendChild(nr);
   $('crumb').textContent='Not found';
   $('content').innerHTML=`<div class="state"><span class="big">${icon}</span><p>${msg}</p><div style="margin-top:18px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">${retry?'<button class="btn btn-primary" onclick="init()">Try again</button>':''}<a class="btn btn-outline" href="index.html">← Back to store</a></div></div>`;
 }
@@ -208,13 +217,25 @@ async function init(){
   $('crumb').textContent=current.name;
   const cc=$('crumbCat');cc.textContent=current.cat;cc.href='index.html?cat='+encodeURIComponent(current.cat);cc.hidden=false;$('crumbCatSep').hidden=false;
 
-  /* structured data for search engines */
-  const ld=document.createElement('script');ld.type='application/ld+json';
-  const j={"@context":"https://schema.org","@type":"Product","name":current.name,"description":desc,"category":current.cat,
-    "offers":{"@type":"Offer","priceCurrency":"PKR","price":String(current.price),"availability":current.inStock?"https://schema.org/InStock":"https://schema.org/OutOfStock"}};
-  if(current.img)j.image=current.img;
+  /* SEO: canonical + social tags + structured data */
+  const SITE="https://drhealthhub.store";
+  const url=SITE+'/product.html?id='+encodeURIComponent(current.id);
+  const setC=(i,v)=>{const e=$(i);if(e)e.setAttribute(i==='canon'?'href':'content',v);};
+  setC('canon',url);setC('ogUrl',url);setC('ogTitle',document.title);setC('ogDesc',desc);
+  if(current.img)setC('ogImg',current.img);
+  const fee=FEE_ITEM.test(current.name);
+  const j={"@context":"https://schema.org","@type":"Product","name":current.name,"description":desc,"category":current.cat,"sku":String(current.id),"url":url,
+    "brand":{"@type":"Brand","name":"Dr Health Hub"},
+    "offers":{"@type":"Offer","url":url,"priceCurrency":"PKR","price":String(current.price),"itemCondition":"https://schema.org/NewCondition","availability":current.inStock?"https://schema.org/InStock":"https://schema.org/OutOfStock",
+      "seller":{"@type":"Organization","name":"Dr Health Hub"},
+      "shippingDetails":{"@type":"OfferShippingDetails","shippingRate":{"@type":"MonetaryAmount","value":fee?String(DELIVERY_FEE):"0","currency":"PKR"},"shippingDestination":{"@type":"DefinedRegion","addressCountry":"PK"}}}};
+  if(current.img)j.image=[current.img];
   if(current.reviewsCount>0&&current.rating>0)j.aggregateRating={"@type":"AggregateRating","ratingValue":current.rating.toFixed(1),"reviewCount":current.reviewsCount};
-  ld.textContent=JSON.stringify(j);document.head.appendChild(ld);
+  const bc={"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+    {"@type":"ListItem","position":1,"name":"Home","item":SITE+"/"},
+    {"@type":"ListItem","position":2,"name":current.cat,"item":SITE+"/?cat="+encodeURIComponent(current.cat)},
+    {"@type":"ListItem","position":3,"name":current.name,"item":url}]};
+  [j,bc].forEach(o=>{const ld=document.createElement('script');ld.type='application/ld+json';ld.textContent=JSON.stringify(o);document.head.appendChild(ld);});
 
   render();
   loadReviews();
